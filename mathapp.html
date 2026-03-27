@@ -863,6 +863,7 @@
     ───────────────────────────────────────────── */
     #view-chapter-1 { padding: 0; }
     #view-chapter-2 { padding: 0; }
+    #view-chapter-3 { padding: 0; }
 
     .ch-sticky-shell {
       position: sticky;
@@ -3010,6 +3011,589 @@
 
     </section><!-- #view-chapter-2 -->
 
+    <!-- ─── CHAPTER 3: GEOMETRY ──────────────── -->
+    <section id="view-chapter-3" class="view">
+
+      <div class="ch-sticky-shell">
+      <div class="ch-header">
+        <div class="ch-breadcrumb">Chapter 3 &middot; Geometry</div>
+        <h1 class="ch-title">Geometry</h1>
+        <p class="ch-desc">The ancient art of shapes, space, and proof. From Euclid's axioms to coordinate planes — master the visual language of mathematics that underlies engineering, art, and science.</p>
+        <div class="ch-meta">
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>5 topics</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>10 exercises</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>1 quiz &middot; 5 questions</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>Unlock next: 80% exercises + quiz pass</span>
+        </div>
+        <div class="ch-progress-row">
+          <span class="ch-progress-label">Exercise progress</span>
+          <div class="ch-progress-track"><div class="ch-progress-fill" id="ch3-header-progress-fill" style="width:0%"></div></div>
+          <span class="ch-progress-pct" id="ch3-header-progress-pct">0%</span>
+        </div>
+      </div>
+
+      <div class="ch-tabs-nav">
+        <button class="ch-tab-btn active" data-tab="lesson" onclick="switchTab('lesson')">Lesson</button>
+        <button class="ch-tab-btn" data-tab="exercises" onclick="switchTab('exercises')">
+          Exercises&nbsp;<span class="ch-tab-counter" id="ch3-ex-counter">0/10</span>
+        </button>
+        <button class="ch-tab-btn" data-tab="quiz" onclick="switchTab('quiz')">
+          Quiz&nbsp;<span class="ch-tab-badge" id="ch3-quiz-badge" style="display:none">PASSED</span>
+        </button>
+      </div>
+      </div><!-- .ch-sticky-shell -->
+
+      <!-- ═══ TAB: LESSON ═══════════════════════════ -->
+      <div id="ch3-tab-lesson" class="ch-tab active" data-tab="lesson">
+        <div class="lesson-content">
+
+          <!-- History -->
+          <div class="history-card">
+            <div class="history-card-label">History of Geometry</div>
+            <h3>From the Nile to the Academy</h3>
+            <p>The word <em>geometry</em> derives from the Greek <em>ge&#333;metria</em> — "earth measurement." The ancient <strong>Egyptians</strong> used rope-stretchers (<em>harpedon&#257;ptai</em>) to re-survey farm boundaries after the annual Nile floods, a practical necessity that seeded one of mathematics' richest branches. The <em>Rhind Mathematical Papyrus</em> (c.&nbsp;1550&nbsp;BCE) contains area formulae for triangles and circles whose precision is remarkable for the era.</p>
+            <p>But it was the Greeks who transformed geometry from practical craft into rigorous science. Around 300&nbsp;BCE, <strong>Euclid of Alexandria</strong> compiled <em>Stoicheia</em> (The Elements) — 13 books building all of plane and solid geometry from just 5 postulates and 23 definitions. So logically airtight was his deductive method that <em>Elements</em> served as a mathematical textbook for over 2,000 years. The 5th postulate — the <em>parallel postulate</em> — would remain controversial until the 19th century, when mathematicians finally built consistent <em>non-Euclidean</em> geometries by replacing it.</p>
+          </div>
+
+          <!-- Topic 1: Angles -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">01</div>
+              <h2 class="topic-title">Points, Lines, and Angles</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>point</strong> has no size — it marks a position. A <strong>line</strong> extends infinitely in both directions; a <strong>line segment</strong> connects two points; a <strong>ray</strong> starts at a point and extends in one direction.</p>
+              <p>An <strong>angle</strong> is formed by two rays sharing a common endpoint (the <em>vertex</em>). Angles are measured in degrees (°).</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Angle Classification</div>
+              $$\text{Acute}: 0° < \theta < 90° \quad \text{Right}: \theta = 90° \quad \text{Obtuse}: 90° < \theta < 180° \quad \text{Straight}: \theta = 180°$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Complementary angles</strong> sum to 90°; <strong>supplementary angles</strong> sum to 180°. <strong>Vertical angles</strong> (formed by two intersecting lines) are always equal.</p>
+              <p>When a transversal crosses parallel lines, <strong>alternate interior angles</strong> are equal, and <strong>co-interior angles</strong> (same-side interior) are supplementary.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 2: Triangles -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">02</div>
+              <h2 class="topic-title">Triangles</h2>
+            </div>
+            <div class="topic-body">
+              <p>Every triangle has three angles whose measures always sum to 180°. Triangles are classified by their sides (equilateral, isosceles, scalene) or their angles (acute, right, obtuse).</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Key Triangle Formulas</div>
+              $$\text{Angle sum: } \alpha + \beta + \gamma = 180°$$
+              $$\text{Area: } A = \tfrac{1}{2}\,b\,h$$
+              $$\text{Pythagorean theorem (right triangles only): } a^2 + b^2 = c^2$$
+            </div>
+            <div class="topic-body">
+              <p>In a right triangle, the side opposite the right angle is the <strong>hypotenuse</strong> ($c$); the other two sides are the <strong>legs</strong> ($a$ and $b$). The Pythagorean theorem is the cornerstone of Euclidean geometry: if $a = 3$ and $b = 4$, then $c = \sqrt{9+16} = 5$ — the famous <em>3-4-5 right triangle</em>.</p>
+              <p>The <strong>exterior angle theorem</strong> states that an exterior angle of a triangle equals the sum of the two non-adjacent interior angles.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 3: Quadrilaterals -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">03</div>
+              <h2 class="topic-title">Quadrilaterals and Polygons</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>polygon</strong> is a closed plane figure bounded by straight line segments. The interior angles of any $n$-sided polygon sum to $(n-2)\times180°$. A <strong>quadrilateral</strong> ($n=4$) therefore has angle sum $360°$.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Interior Angle Sum &amp; Area Formulas</div>
+              $$\text{Polygon angle sum: } S = (n-2)\times180°$$
+              $$\text{Rectangle: } A = lw \qquad \text{Parallelogram: } A = bh \qquad \text{Trapezoid: } A = \tfrac{1}{2}(a+b)h$$
+            </div>
+            <div class="topic-body">
+              <p>Special quadrilaterals form a hierarchy: every <strong>square</strong> is a rectangle, every rectangle is a parallelogram, and every parallelogram is a trapezoid. A <strong>rhombus</strong> has four equal sides; a <strong>kite</strong> has two pairs of adjacent equal sides.</p>
+              <p><strong>Example:</strong> A hexagon has $(6-2)\times180° = 720°$ total interior angle sum, so each interior angle of a regular hexagon is $720°\div6 = 120°$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 4: Circles -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">04</div>
+              <h2 class="topic-title">Circles</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>circle</strong> is the set of all points in a plane equidistant from a fixed center. That distance is the <strong>radius</strong> $r$; the <strong>diameter</strong> is $d = 2r$. The ratio of circumference to diameter is always $\pi \approx 3.14159\ldots$</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Circle Formulas</div>
+              $$\text{Circumference: } C = 2\pi r = \pi d$$
+              $$\text{Area: } A = \pi r^2$$
+              $$\text{Arc length: } s = r\theta \quad (\theta \text{ in radians}) \qquad \text{Sector area: } A_s = \tfrac{1}{2}r^2\theta$$
+            </div>
+            <div class="topic-body">
+              <p>A <strong>central angle</strong> has its vertex at the center; its measure equals the arc it intercepts. An <strong>inscribed angle</strong> has its vertex on the circle; its measure is half the intercepted arc.</p>
+              <p>A <strong>chord</strong> connects two points on the circle; the longest chord passes through the center and is the diameter. A <strong>tangent</strong> line touches the circle at exactly one point and is always perpendicular to the radius at that point.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 5: Coordinate Geometry -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">05</div>
+              <h2 class="topic-title">Coordinate Geometry</h2>
+            </div>
+            <div class="topic-body">
+              <p>The <strong>Cartesian plane</strong> — named after René Descartes — assigns each point a unique pair $(x, y)$. This bridge between algebra and geometry allows us to compute geometric properties using arithmetic.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Coordinate Geometry Formulas</div>
+              $$\text{Distance: } d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+              $$\text{Midpoint: } M = \left(\frac{x_1+x_2}{2},\; \frac{y_1+y_2}{2}\right)$$
+              $$\text{Slope: } m = \frac{y_2 - y_1}{x_2 - x_1}$$
+            </div>
+            <div class="topic-body">
+              <p>Two lines are <strong>parallel</strong> if they have equal slopes ($m_1 = m_2$) and <strong>perpendicular</strong> if their slopes are negative reciprocals ($m_1 \cdot m_2 = -1$).</p>
+              <p>The equation of a circle centered at $(h, k)$ with radius $r$ is: $(x-h)^2 + (y-k)^2 = r^2$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Real-life Applications -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Real-Life Applications</h2>
+          <div class="app-grid">
+            <div class="app-card">
+              <span class="app-card-icon">&#127963;</span>
+              <div class="app-card-title">Architecture &amp; Engineering</div>
+              <div class="app-card-body">
+                <p>Structural engineers use the Pythagorean theorem to verify right angles and calculate diagonal bracing. The stability of a triangular truss relies on the fact that a triangle is the only polygon whose shape is uniquely determined by its side lengths — it cannot be deformed without changing a side.</p>
+                <p>Architects use sector areas to design arched ceilings and domes; knowing $A_s = \frac{1}{2}r^2\theta$ lets them calculate materials for curved surfaces with precision.</p>
+              </div>
+            </div>
+            <div class="app-card">
+              <span class="app-card-icon">&#128205;</span>
+              <div class="app-card-title">Navigation &amp; GPS</div>
+              <div class="app-card-body">
+                <p>GPS satellites use the distance formula — generalised to 3D as $d = \sqrt{\Delta x^2 + \Delta y^2 + \Delta z^2}$ — to determine your location by trilateration from at least three satellites.</p>
+                <p>The great-circle distance (shortest path on a sphere) between two locations relies on spherical geometry, a natural extension of the coordinate geometry concepts introduced here. Every flight path optimisation depends on it.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Worked Examples -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Worked Examples</h2>
+
+          <!-- Example 1 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 1</div>
+                <div class="we-question">A triangle has angles of 48° and 73°. Find the third angle.</div>
+              </div>
+              <span class="we-difficulty diff-easy">Easy</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Apply the angle sum theorem:</strong> the three angles of any triangle sum to 180°.<br>$48° + 73° + \theta = 180°$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Combine known angles:</strong> $48 + 73 = 121$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Solve for $\theta$:</strong> $\theta = 180° - 121° = 59°$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: The third angle is $\mathbf{59°}$</div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 2</div>
+                <div class="we-question">A ladder 13 m long leans against a wall. Its base is 5 m from the wall. How high up the wall does it reach?</div>
+              </div>
+              <span class="we-difficulty diff-medium">Medium</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Identify the right triangle:</strong> hypotenuse $c = 13$ m, one leg $a = 5$ m, unknown leg $b$ = height.</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Apply Pythagorean theorem:</strong> $a^2 + b^2 = c^2 \;\Rightarrow\; 5^2 + b^2 = 13^2 \;\Rightarrow\; 25 + b^2 = 169$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Solve:</strong> $b^2 = 169 - 25 = 144 \;\Rightarrow\; b = \sqrt{144} = 12$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: The ladder reaches $\mathbf{12}$ m up the wall. (Note: 5-12-13 is a Pythagorean triple.)</div>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 3</div>
+                <div class="we-question">Find the distance and midpoint between points $A(-3, 2)$ and $B(5, -4)$.</div>
+              </div>
+              <span class="we-difficulty diff-hard">Hard</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Distance formula:</strong> $d = \sqrt{(5-(-3))^2 + (-4-2)^2} = \sqrt{8^2 + (-6)^2} = \sqrt{64+36} = \sqrt{100} = 10$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Midpoint formula:</strong> $M = \left(\dfrac{-3+5}{2},\; \dfrac{2+(-4)}{2}\right) = \left(\dfrac{2}{2},\; \dfrac{-2}{2}\right) = (1,\; -1)$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: Distance $= \mathbf{10}$ units; Midpoint $= \mathbf{(1,\,-1)}$</div>
+          </div>
+
+        </div><!-- .lesson-content -->
+      </div><!-- #ch3-tab-lesson -->
+
+
+      <!-- ═══ TAB: EXERCISES ════════════════════════ -->
+      <div id="ch3-tab-exercises" class="ch-tab" data-tab="exercises">
+        <div class="exercises-content">
+          <div class="exercises-header">
+            <div class="exercises-title">Practice Exercises</div>
+            <div class="exercises-score-text" id="ch3-ex-score-text">0 / 10 correct</div>
+          </div>
+          <p class="exercises-desc">Answer at least 8 out of 10 correctly (80%) to qualify for the chapter quiz.</p>
+          <div class="ch-progress-row" style="margin-bottom:20px;">
+            <span class="ch-progress-label">Score</span>
+            <div class="ch-progress-track" style="width:auto;flex:1;max-width:340px;"><div class="ch-progress-fill" id="ch3-ex-progress-fill" style="width:0%"></div></div>
+            <span class="ch-progress-pct" id="ch3-ex-progress-pct">0%</span>
+          </div>
+          <div class="difficulty-legend">
+            <span class="dl-item"><span class="we-difficulty diff-easy">Easy</span>&nbsp;Q1–3</span>
+            <span class="dl-item"><span class="we-difficulty diff-medium">Medium</span>&nbsp;Q4–7</span>
+            <span class="dl-item"><span class="we-difficulty diff-hard">Hard</span>&nbsp;Q8–10</span>
+          </div>
+
+          <!-- Q1 -->
+          <div class="ex-card" id="ex3-1" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q1</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">A triangle has angles of 50° and 60°. What is the third angle?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('1',this)"><div class="mc-letter">A</div><span class="mc-text">$60°$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption3('1',this)"><div class="mc-letter">B</div><span class="mc-text">$80°$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption3('1',this)"><div class="mc-letter">C</div><span class="mc-text">$70°$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('1',this)"><div class="mc-letter">D</div><span class="mc-text">$90°$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('1')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $50° + 60° + \theta = 180°$, so $\theta = 180° - 110° = 70°$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: 70°</strong>.<div class="fb-expl">The three angles of any triangle sum to 180°: $50° + 60° = 110°$, so the third angle is $180° - 110° = 70°$.<br>A: that's one of the given angles. &nbsp; B: you may have added 60+60−40. &nbsp; D: only possible if one angle is 0°, which can't happen.</div></div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="ex-card" id="ex3-2" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q2</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">An angle measures 130°. What is its supplementary angle?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('2',this)"><div class="mc-letter">A</div><span class="mc-text">$40°$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption3('2',this)"><div class="mc-letter">B</div><span class="mc-text">$50°$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption3('2',this)"><div class="mc-letter">C</div><span class="mc-text">$60°$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('2',this)"><div class="mc-letter">D</div><span class="mc-text">$230°$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('2')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Supplementary angles sum to 180°: $180° - 130° = 50°$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: 50°</strong>.<div class="fb-expl">Supplementary means summing to 180°, not 90°. $180° - 130° = 50°$.<br>A ($40°$): used complementary (90°) rule instead: $90°-130°$ makes no sense — the angle exceeds 90°, so it has no complement.<br>D ($230°$): added instead of subtracted.</div></div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="ex-card" id="ex3-3" data-type="fill" data-answer="5" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q3</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">A right triangle has legs of length 3 and 4. What is the length of the hypotenuse?</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">Hypotenuse $=$ </span>
+              <input class="fill-input" type="text" placeholder="?" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('3')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $3^2 + 4^2 = 9 + 16 = 25$, so $c = \sqrt{25} = 5$. The 3-4-5 right triangle is the most famous Pythagorean triple.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>5</strong>.<div class="fb-expl">Use the Pythagorean theorem: $a^2 + b^2 = c^2 \Rightarrow 9 + 16 = 25 \Rightarrow c = 5$.<br>Common errors: computing $3 + 4 = 7$ (adding instead of using squares), or $\sqrt{3^2+4^2} = \sqrt{3+4}$ (forgetting to square first).</div></div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="ex-card" id="ex3-4" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q4</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">What is the area of a triangle with base 10 cm and height 6 cm?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('4',this)"><div class="mc-letter">A</div><span class="mc-text">$60 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption3('4',this)"><div class="mc-letter">B</div><span class="mc-text">$30 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption3('4',this)"><div class="mc-letter">C</div><span class="mc-text">$16 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('4',this)"><div class="mc-letter">D</div><span class="mc-text">$32 \text{ cm}^2$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('4')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $A = \tfrac{1}{2} \times 10 \times 6 = 30 \text{ cm}^2$. Don't forget the factor of $\tfrac{1}{2}$ for triangles!</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: 30 cm²</strong>.<div class="fb-expl">Triangle area: $A = \tfrac{1}{2}bh = \tfrac{1}{2}\times10\times6 = 30$.<br>A ($60$): used rectangle formula $bh$ — forgot to halve it. &nbsp; C/D: likely used perimeter or half the perimeter instead of the area formula.</div></div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="ex-card" id="ex3-5" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q5</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">What is the area of a rectangle with length 8 cm and width 5 cm?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('5',this)"><div class="mc-letter">A</div><span class="mc-text">$26 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption3('5',this)"><div class="mc-letter">B</div><span class="mc-text">$13 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption3('5',this)"><div class="mc-letter">C</div><span class="mc-text">$40 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('5',this)"><div class="mc-letter">D</div><span class="mc-text">$80 \text{ cm}^2$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('5')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $A = l \times w = 8 \times 5 = 40 \text{ cm}^2$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: 40 cm²</strong>.<div class="fb-expl">Rectangle area is simply length times width: $8\times5=40$.<br>A ($26$): that's the perimeter $2(8+5)=26$, not the area. &nbsp; B ($13$): half the perimeter — wrong formula. &nbsp; D ($80$): doubled the area by mistake.</div></div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="ex-card" id="ex3-6" data-type="fill" data-answer="540" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q6</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">What is the sum of the interior angles of a pentagon (5 sides), in degrees?</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">Angle sum $=$ </span>
+              <input class="fill-input" type="text" placeholder="°" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('6')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $(n-2)\times180° = (5-2)\times180° = 3\times180° = 540°$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>540°</strong>.<div class="fb-expl">Use the formula $S = (n-2)\times180°$. For a pentagon $n=5$: $(5-2)\times180°=3\times180°=540°$.<br>Common errors: forgetting to subtract 2 first, or using $n\times180°=900°$ (which gives the sum of exterior + interior angles, not just interior).</div></div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="ex-card" id="ex3-7" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q7</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">The circumference of a circle with radius 7 cm is approximately (use $\pi \approx 3.14$):</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('7',this)"><div class="mc-letter">A</div><span class="mc-text">$21.98 \text{ cm}$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption3('7',this)"><div class="mc-letter">B</div><span class="mc-text">$43.96 \text{ cm}$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption3('7',this)"><div class="mc-letter">C</div><span class="mc-text">$153.86 \text{ cm}$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('7',this)"><div class="mc-letter">D</div><span class="mc-text">$14 \text{ cm}$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('7')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $C = 2\pi r = 2\times3.14\times7 = 43.96$ cm.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: 43.96 cm</strong>.<div class="fb-expl">$C = 2\pi r = 2\times3.14\times7 = 43.96$ cm.<br>A ($21.98$): used $\pi r$ instead of $2\pi r$ — forgot the factor of 2 (or used the diameter formula with just radius). &nbsp; C ($153.86$): computed the area $\pi r^2=3.14\times49=153.86$ — wrong formula. &nbsp; D ($14$): used $2r$ without $\pi$.</div></div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="ex-card" id="ex3-8" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q8</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">What is the distance between points $(0,\,0)$ and $(6,\,8)$?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption3('8',this)"><div class="mc-letter">A</div><span class="mc-text">$7$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption3('8',this)"><div class="mc-letter">B</div><span class="mc-text">$14$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption3('8',this)"><div class="mc-letter">C</div><span class="mc-text">$10$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('8',this)"><div class="mc-letter">D</div><span class="mc-text">$\sqrt{28}$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('8')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $d = \sqrt{6^2+8^2} = \sqrt{36+64} = \sqrt{100} = 10$. A 6-8-10 right triangle (a scaled 3-4-5).</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: 10</strong>.<div class="fb-expl">Distance formula: $d = \sqrt{(6-0)^2+(8-0)^2} = \sqrt{36+64} = \sqrt{100} = 10$.<br>A ($7$): added coordinates ($6+8=14$), then halved — no valid formula does this. &nbsp; B ($14$): simply added $6+8$ — this gives a sum, not a distance. &nbsp; D: perhaps squared only the first coordinate: $\sqrt{6^2+8}=\sqrt{44}\approx\sqrt{28}$, forgetting to square $y$.</div></div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="ex-card" id="ex3-9" data-type="fill" data-answer="8" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q9</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">A circle has an area of $64\pi$ cm². What is its radius in cm?</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">Radius $=$ </span>
+              <input class="fill-input" type="text" placeholder="cm" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('9')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $A = \pi r^2 = 64\pi \Rightarrow r^2 = 64 \Rightarrow r = 8$ cm.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>8</strong>.<div class="fb-expl">Set $\pi r^2 = 64\pi$, divide both sides by $\pi$: $r^2 = 64$, then $r = \sqrt{64} = 8$.<br>Common errors: taking $r = 64\div2 = 32$ (forgetting the square), or $r = \sqrt{64\pi}/\pi$ (not cancelling $\pi$ first).</div></div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="ex-card" id="ex3-10" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q10</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">A trapezoid has parallel sides of 5 cm and 11 cm, and a height of 4 cm. What is its area?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="true"  onclick="selectMCOption3('10',this)"><div class="mc-letter">A</div><span class="mc-text">$32 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption3('10',this)"><div class="mc-letter">B</div><span class="mc-text">$44 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption3('10',this)"><div class="mc-letter">C</div><span class="mc-text">$88 \text{ cm}^2$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption3('10',this)"><div class="mc-letter">D</div><span class="mc-text">$20 \text{ cm}^2$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise3('10')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $A = \tfrac{1}{2}(a+b)h = \tfrac{1}{2}(5+11)\times4 = \tfrac{1}{2}\times16\times4 = 32 \text{ cm}^2$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>A: 32 cm²</strong>.<div class="fb-expl">Trapezoid area: $A = \tfrac{1}{2}(a+b)\times h = \tfrac{1}{2}(5+11)\times4 = \tfrac{1}{2}\times64 = 32$.<br>B ($44$): used $(a+b)\times h$ without halving. &nbsp; C ($88$): used $(a\times b)\times h = 55\times4$ — multiplied instead of adding the parallel sides. &nbsp; D ($20$): only used one parallel side: $\tfrac{1}{2}\times5\times4+2 = \ldots$, incorrect decomposition.</div></div>
+          </div>
+
+        </div><!-- .exercises-content -->
+      </div><!-- #ch3-tab-exercises -->
+
+
+      <!-- ═══ TAB: QUIZ ════════════════════════════ -->
+      <div id="ch3-tab-quiz" class="ch-tab" data-tab="quiz">
+        <div class="quiz-content">
+          <div class="quiz-header">
+            <div class="quiz-title">Chapter 3 Quiz</div>
+            <p class="quiz-desc">5 questions spanning all topics. Score at least 4/5 (80%) to pass. Combined with 80% on exercises, a passing score unlocks Chapter 4 — Algebra II.</p>
+            <div class="quiz-rules">
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>5 multiple-choice questions</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Pass mark: 4 out of 5</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Can be retaken if failed</div>
+            </div>
+          </div>
+
+          <div id="quiz3-form" class="quiz-form">
+
+            <!-- Quiz Q1 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q1</span>
+                <div class="quiz-q-text">What is the area of a circle with radius 3? (Leave in terms of $\pi$.)</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_1')"><input type="radio" name="q3_1" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$6\pi$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_1')"><input type="radio" name="q3_1" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$9\pi$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_1')"><input type="radio" name="q3_1" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$3\pi$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_1')"><input type="radio" name="q3_1" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$12\pi$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q2 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q2</span>
+                <div class="quiz-q-text">A triangle has angles of 40° and 75°. What is the third angle?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_2')"><input type="radio" name="q3_2" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$55°$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_2')"><input type="radio" name="q3_2" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$65°$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_2')"><input type="radio" name="q3_2" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$75°$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_2')"><input type="radio" name="q3_2" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$115°$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q3 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q3</span>
+                <div class="quiz-q-text">What is the distance between $(-1,\,2)$ and $(2,\,6)$?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_3')"><input type="radio" name="q3_3" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$3$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_3')"><input type="radio" name="q3_3" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$4$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_3')"><input type="radio" name="q3_3" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$5$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_3')"><input type="radio" name="q3_3" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$7$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q4 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q4</span>
+                <div class="quiz-q-text">What is the area of a parallelogram with base 9 cm and height 4 cm?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_4')"><input type="radio" name="q3_4" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$26 \text{ cm}^2$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_4')"><input type="radio" name="q3_4" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$36 \text{ cm}^2$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_4')"><input type="radio" name="q3_4" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$18 \text{ cm}^2$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_4')"><input type="radio" name="q3_4" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$72 \text{ cm}^2$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q5 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q5</span>
+                <div class="quiz-q-text">A circle has circumference $10\pi$ cm. What is its radius?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_5')"><input type="radio" name="q3_5" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$5 \text{ cm}$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_5')"><input type="radio" name="q3_5" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$10 \text{ cm}$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_5')"><input type="radio" name="q3_5" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$20 \text{ cm}$</span></label>
+                <label class="mc-option" onclick="selectQuiz3Opt(this,'q3_5')"><input type="radio" name="q3_5" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$2.5 \text{ cm}$</span></label>
+              </div>
+            </div>
+
+            <div class="quiz-submit-row">
+              <button class="btn-primary" onclick="submitQuiz3()">Submit Quiz</button>
+            </div>
+          </div><!-- #quiz3-form -->
+
+          <!-- Result panel -->
+          <div id="quiz3-result" class="quiz-result">
+            <span class="quiz-result-icon" id="quiz3-result-icon">&#127891;</span>
+            <div class="quiz-result-title" id="quiz3-result-title">Excellent Work!</div>
+            <span class="quiz-result-score" id="quiz3-result-score">5 / 5</span>
+            <p class="quiz-result-msg" id="quiz3-result-msg"></p>
+            <button class="btn-retry" onclick="retryQuiz3()">Retake Quiz</button>
+            <div class="quiz-unlock-banner" id="quiz3-unlock-banner"></div>
+          </div>
+
+        </div><!-- .quiz-content -->
+      </div><!-- #ch3-tab-quiz -->
+
+    </section><!-- #view-chapter-3 -->
+
     <!-- Generic placeholder for locked chapters -->
     <section id="view-chapter" class="view">
       <div style="padding: 40px 48px;">
@@ -3030,7 +3614,7 @@
   const CHAPTERS = [
     { id: 'chapter-1', num: 1, title: 'Arithmetic',          subtitle: 'Integers, Fractions & PEMDAS', lessons: 0, exercises: 10 },
     { id: 'chapter-2', num: 2, title: 'Algebra I',          subtitle: 'Equations & Inequalities', lessons: 0,  exercises: 10 },
-    { id: 'chapter-3', num: 3, title: 'Geometry',           subtitle: 'Shapes & Proofs',          lessons: 10, exercises: 20 },
+    { id: 'chapter-3', num: 3, title: 'Geometry',           subtitle: 'Shapes & Proofs',          lessons: 0,  exercises: 10 },
     { id: 'chapter-4', num: 4, title: 'Algebra II',         subtitle: 'Functions & Polynomials',  lessons: 9,  exercises: 18 },
     { id: 'chapter-5', num: 5, title: 'Trigonometry',       subtitle: 'Angles & Waves',           lessons: 8,  exercises: 16 },
     { id: 'chapter-6', num: 6, title: 'Pre-Calculus',       subtitle: 'Limits & Sequences',       lessons: 7,  exercises: 14 },
@@ -3202,6 +3786,17 @@
       try { updateCh2UI(); } catch(e) {}
       try { restoreExercise2States(); } catch(e) {}
       try { restoreQuiz2State(); } catch(e) {}
+    } else if (viewId === 'chapter-3') {
+      showView('view-chapter-3');
+      document.querySelectorAll('#view-chapter-3 .ch-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === 'lesson');
+      });
+      document.querySelectorAll('#view-chapter-3 .ch-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === 'lesson');
+      });
+      try { updateCh3UI(); } catch(e) {}
+      try { restoreExercise3States(); } catch(e) {}
+      try { restoreQuiz3State(); } catch(e) {}
     } else {
       showView('view-chapter');
     }
@@ -3513,8 +4108,8 @@
 
     // If incorrect, inject a "Try Again" button
     if (!isCorrect && !card.querySelector('.btn-retry-ex')) {
-      const chapterId = card.id.startsWith('ex2-') ? 'chapter-2' : 'chapter-1';
-      const eId = card.id.replace(/^ex2?-/, '');
+      const chapterId = card.id.startsWith('ex3-') ? 'chapter-3' : card.id.startsWith('ex2-') ? 'chapter-2' : 'chapter-1';
+      const eId = card.id.replace(/^ex[23]?-/, '');
       const retryBtn = document.createElement('button');
       retryBtn.className = 'btn-retry-ex';
       retryBtn.textContent = 'Try Again';
@@ -3532,7 +4127,7 @@
     p.exercisesCompleted = Object.values(p.exerciseAnswers).filter(a => a.correct).length;
     saveState(state);
 
-    const cardId = chapterId === 'chapter-1' ? 'ex-' + exId : 'ex2-' + exId;
+    const cardId = chapterId === 'chapter-1' ? 'ex-' + exId : chapterId === 'chapter-2' ? 'ex2-' + exId : 'ex3-' + exId;
     const card = document.getElementById(cardId);
     if (!card) return;
 
@@ -3562,6 +4157,7 @@
 
     if (chapterId === 'chapter-1') updateCh1UI();
     else if (chapterId === 'chapter-2') updateCh2UI();
+    else if (chapterId === 'chapter-3') updateCh3UI();
     renderTopbar();
     renderSidebar();
     renderFooterStats();
@@ -3876,6 +4472,197 @@
     p.quizPassed = false;
     saveState(state);
     updateCh2UI();
+    renderSidebar();
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 3 — UI helpers
+  // ──────────────────────────────────────────────────
+  function updateCh3UI() {
+    if (!state.chapterProgress['chapter-3']) return;
+    const p = state.chapterProgress['chapter-3'];
+    const done = p.exercisesCompleted || 0;
+    const total = 10;
+    const pct = Math.round((done / total) * 100);
+
+    const setWidth = (id, w) => { const el = document.getElementById(id); if (el) el.style.width = w; };
+    setWidth('ch3-header-progress-fill', pct + '%');
+    setWidth('ch3-ex-progress-fill', pct + '%');
+
+    const hPct      = document.getElementById('ch3-header-progress-pct');
+    const ePct      = document.getElementById('ch3-ex-progress-pct');
+    const scoreText = document.getElementById('ch3-ex-score-text');
+    const counter   = document.getElementById('ch3-ex-counter');
+    if (hPct)      hPct.textContent      = pct + '%';
+    if (ePct)      ePct.textContent      = pct + '%';
+    if (scoreText) scoreText.textContent = `${done} / ${total} correct`;
+    if (counter)   counter.textContent   = `${done}/${total}`;
+
+    const quizBadge = document.getElementById('ch3-quiz-badge');
+    if (quizBadge) quizBadge.style.display = p.quizPassed ? '' : 'none';
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 3 — Exercises
+  // ──────────────────────────────────────────────────
+  function selectMCOption3(exId, optEl) {
+    const p = state.chapterProgress['chapter-3'];
+    if (p.exerciseAnswers && p.exerciseAnswers[exId]) return;
+    const card = document.getElementById('ex3-' + exId);
+    card.querySelectorAll('.mc-option').forEach(o => o.classList.remove('opt-selected'));
+    optEl.classList.add('opt-selected');
+  }
+
+  function checkExercise3(exId) {
+    const p = state.chapterProgress['chapter-3'];
+    if (!p.exerciseAnswers) p.exerciseAnswers = {};
+    if (p.exerciseAnswers[exId]) return;
+
+    const card = document.getElementById('ex3-' + exId);
+    const type = card.dataset.type;
+    let isCorrect = false;
+    let answerValue = '';
+
+    if (type === 'mc') {
+      const sel = card.querySelector('.mc-option.opt-selected');
+      if (!sel) { showToast('Select an answer first.'); return; }
+      answerValue = sel.dataset.value;
+      isCorrect = sel.dataset.correct === 'true';
+    } else {
+      const input = card.querySelector('.fill-input');
+      answerValue = (input ? input.value.trim() : '');
+      isCorrect = normaliseFill(answerValue) === normaliseFill(card.dataset.answer);
+    }
+
+    p.exerciseAnswers[exId] = { correct: isCorrect, value: answerValue };
+    const correctCount = Object.values(p.exerciseAnswers).filter(a => a.correct).length;
+    p.exercisesCompleted = correctCount;
+    if (isCorrect) p.xp = (p.xp || 0) + (parseInt(card.dataset.xp) || 10);
+    saveState(state);
+
+    applyExerciseUI(card, exId, isCorrect, type, answerValue);
+    updateCh3UI();
+    renderTopbar();
+    renderSidebar();
+    renderFooterStats();
+  }
+
+  function restoreExercise3States() {
+    if (!state.chapterProgress['chapter-3']) return;
+    const p = state.chapterProgress['chapter-3'];
+    if (!p.exerciseAnswers) return;
+    Object.entries(p.exerciseAnswers).forEach(([exId, ans]) => {
+      const card = document.getElementById('ex3-' + exId);
+      if (!card || card.classList.contains('answered-correct') || card.classList.contains('answered-incorrect')) return;
+      const type = card.dataset.type;
+      if (type === 'mc') {
+        card.querySelectorAll('.mc-option').forEach(opt => {
+          if (opt.dataset.value === ans.value) opt.classList.add('opt-selected');
+        });
+      } else {
+        const input = card.querySelector('.fill-input');
+        if (input) input.value = ans.value;
+      }
+      applyExerciseUI(card, exId, ans.correct, type, ans.value);
+    });
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 3 — Quiz
+  // ──────────────────────────────────────────────────
+  const QUIZ3_ANSWERS = { q3_1: 'B', q3_2: 'B', q3_3: 'C', q3_4: 'B', q3_5: 'A' };
+
+  function selectQuiz3Opt(labelEl, questionName) {
+    document.querySelectorAll(`input[name="${questionName}"]`).forEach(inp => {
+      inp.closest('.mc-option').classList.remove('opt-selected');
+    });
+    labelEl.classList.add('opt-selected');
+    const inp = labelEl.querySelector('input');
+    if (inp) inp.checked = true;
+  }
+
+  function submitQuiz3() {
+    let score = 0;
+    let allAnswered = true;
+
+    Object.keys(QUIZ3_ANSWERS).forEach(qName => {
+      const checked = document.querySelector(`input[name="${qName}"]:checked`);
+      if (!checked) { allAnswered = false; return; }
+      if (checked.value === QUIZ3_ANSWERS[qName]) score++;
+    });
+
+    if (!allAnswered) { showToast('Please answer all 5 questions before submitting.'); return; }
+
+    const passed = score >= 4;
+    const p = state.chapterProgress['chapter-3'];
+    p.quizScore  = score;
+    p.quizPassed = passed;
+    if (passed) p.xp = (p.xp || 0) + 50;
+    saveState(state);
+
+    renderQuiz3Result(score, passed);
+    updateCh3UI();
+    renderSidebar();
+    renderTopbar();
+  }
+
+  function renderQuiz3Result(score, passed) {
+    document.getElementById('quiz3-form').classList.add('hidden');
+    const result = document.getElementById('quiz3-result');
+    result.classList.add('show');
+
+    document.getElementById('quiz3-result-icon').textContent  = passed ? '🎓' : '📚';
+    document.getElementById('quiz3-result-score').textContent = `${score} / 5`;
+
+    const title = document.getElementById('quiz3-result-title');
+    title.textContent = passed ? 'Excellent Work!' : 'Keep Practicing';
+    title.className   = 'quiz-result-title ' + (passed ? 'qrt-pass' : 'qrt-fail');
+
+    document.getElementById('quiz3-result-msg').textContent = passed
+      ? `You scored ${score}/5 (${Math.round(score/5*100)}%). You have passed the Chapter 3 quiz!`
+      : `You scored ${score}/5 (${Math.round(score/5*100)}%). You need at least 4/5 to pass. Review the lesson and try again.`;
+
+    const p = state.chapterProgress['chapter-3'];
+    const exPct = Math.round(((p.exercisesCompleted || 0) / 10) * 100);
+    const banner = document.getElementById('quiz3-unlock-banner');
+    if (banner) {
+      if (passed && exPct >= 80) {
+        banner.textContent = 'Chapter 4 — Algebra II is now unlocked! Continue your journey.';
+        banner.classList.add('show');
+      } else if (passed && exPct < 80) {
+        banner.textContent = `Quiz passed! Complete ${Math.ceil(8 - p.exercisesCompleted)} more exercise(s) correctly to unlock Chapter 4.`;
+        banner.classList.add('show');
+      } else {
+        banner.classList.remove('show');
+      }
+    }
+  }
+
+  function restoreQuiz3State() {
+    if (!state.chapterProgress['chapter-3']) return;
+    const p = state.chapterProgress['chapter-3'];
+    if (p.quizScore !== null && p.quizScore !== undefined) {
+      renderQuiz3Result(p.quizScore, p.quizPassed);
+    } else {
+      const form   = document.getElementById('quiz3-form');
+      const result = document.getElementById('quiz3-result');
+      if (form)   form.classList.remove('hidden');
+      if (result) result.classList.remove('show');
+    }
+  }
+
+  function retryQuiz3() {
+    document.getElementById('quiz3-form').classList.remove('hidden');
+    document.getElementById('quiz3-result').classList.remove('show');
+    document.querySelectorAll('#quiz3-form input[type="radio"]').forEach(r => {
+      r.checked = false;
+      r.closest('.mc-option').classList.remove('opt-selected');
+    });
+    const p = state.chapterProgress['chapter-3'];
+    p.quizScore  = null;
+    p.quizPassed = false;
+    saveState(state);
+    updateCh3UI();
     renderSidebar();
   }
 
