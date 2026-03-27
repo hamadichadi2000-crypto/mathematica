@@ -1,0 +1,3812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathematica — Master Mathematics</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ]
+    });"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      --bg-base:        #0F1729;
+      --bg-surface:     #162035;
+      --bg-elevated:    #1C2A45;
+      --bg-hover:       #223154;
+      --border:         #263556;
+      --border-subtle:  #1E2D4A;
+
+      --text-primary:   #F0EDE6;   /* chalk-white */
+      --text-secondary: #9DAEC8;
+      --text-muted:     #5A6E8C;
+
+      --gold:           #F0C040;
+      --gold-dim:       #C8A030;
+      --gold-glow:      rgba(240, 192, 64, 0.18);
+
+      --accent-blue:    #4A90D9;
+      --accent-green:   #4CAF86;
+      --accent-red:     #E05C5C;
+
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+
+      --sidebar-width: 260px;
+      --topbar-height: 60px;
+
+      --transition-fast:   0.15s ease;
+      --transition-normal: 0.25s ease;
+      --transition-slow:   0.4s ease;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.5);
+      --shadow-lg:  0 8px 32px rgba(0,0,0,0.6);
+      --shadow-gold: 0 0 20px rgba(240,192,64,0.25);
+    }
+
+    [data-theme="light"] {
+      --bg-base:        #F5F0E8;
+      --bg-surface:     #FDFAF5;
+      --bg-elevated:    #FFFFFF;
+      --bg-hover:       #EDE8DC;
+      --border:         #D8CEB8;
+      --border-subtle:  #EDE8DC;
+
+      --text-primary:   #1A1A2E;
+      --text-secondary: #4A4A6A;
+      --text-muted:     #8A8AAA;
+
+      --gold:           #C8860A;
+      --gold-dim:       #A06A00;
+      --gold-glow:      rgba(200, 134, 10, 0.12);
+
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.12);
+      --shadow-lg:  0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow: hidden;
+      transition: background var(--transition-slow), color var(--transition-slow);
+    }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT SHELL
+    ───────────────────────────────────────────── */
+    #app {
+      display: grid;
+      grid-template-rows: var(--topbar-height) 1fr;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-areas:
+        "topbar topbar"
+        "sidebar main";
+      height: 100vh;
+    }
+
+    /* ─────────────────────────────────────────────
+       TOP BAR
+    ───────────────────────────────────────────── */
+    #topbar {
+      grid-area: topbar;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      z-index: 100;
+      position: relative;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .topbar-brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gold);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--bg-base);
+      flex-shrink: 0;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .topbar-brand-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    .topbar-brand-name span {
+      color: var(--gold);
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Global progress bar in topbar */
+    .topbar-progress-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .topbar-progress-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 5px;
+      background: var(--bg-elevated);
+      border-radius: 99px;
+      overflow: hidden;
+      min-width: 60px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    .topbar-progress-pct {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* Streak counter */
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 5px 12px;
+      cursor: default;
+      flex-shrink: 0;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .streak-badge:hover {
+      border-color: var(--gold-dim);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .streak-flame {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .streak-count {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gold);
+    }
+
+    .streak-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Dark mode toggle */
+    .theme-toggle {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background var(--transition-fast), border-color var(--transition-fast),
+                  color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-hover);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+      transform: rotate(15deg);
+    }
+
+    .theme-toggle svg { width: 18px; height: 18px; }
+
+    /* ─────────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────────── */
+    #sidebar {
+      grid-area: sidebar;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-section-label {
+      padding: 20px 20px 8px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    /* Nav links */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      margin: 1px 8px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+      position: relative;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--gold-glow);
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: var(--gold);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .nav-item-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .nav-item.active .nav-item-icon { opacity: 1; }
+
+    .nav-item-text { flex: 1; }
+
+    .nav-item-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: var(--bg-elevated);
+      color: var(--text-muted);
+    }
+
+    .nav-item.active .nav-item-badge {
+      background: var(--gold-glow);
+      color: var(--gold);
+    }
+
+    /* Sidebar separator */
+    .sidebar-sep {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 8px 16px;
+    }
+
+    /* Chapter list */
+    .chapter-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 12px;
+    }
+
+    .chapter-list::-webkit-scrollbar { width: 4px; }
+    .chapter-list::-webkit-scrollbar-track { background: transparent; }
+    .chapter-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .chapter-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 16px;
+      margin: 1px 8px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background var(--transition-fast);
+      position: relative;
+      user-select: none;
+    }
+
+    .chapter-item:not(.locked):hover {
+      background: var(--bg-hover);
+    }
+
+    .chapter-item.locked {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .chapter-item.active {
+      background: var(--gold-glow);
+    }
+
+    .chapter-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: background var(--transition-fast), border-color var(--transition-fast),
+                  color var(--transition-fast);
+    }
+
+    .chapter-item.unlocked .chapter-num {
+      background: var(--gold-glow);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    .chapter-item.completed .chapter-num {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .chapter-info { flex: 1; min-width: 0; }
+
+    .chapter-title {
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .chapter-item.locked .chapter-title { color: var(--text-muted); }
+
+    .chapter-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .chapter-mini-progress {
+      height: 2px;
+      background: var(--bg-elevated);
+      border-radius: 99px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .chapter-mini-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .lock-icon {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      margin-top: 6px;
+      color: var(--text-muted);
+    }
+
+    /* Sidebar footer */
+    .sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .sidebar-footer-stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .stat-pill {
+      flex: 1;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      text-align: center;
+    }
+
+    .stat-pill-value {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--gold);
+      display: block;
+    }
+
+    .stat-pill-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ─────────────────────────────────────────────
+       MAIN CONTENT
+    ───────────────────────────────────────────── */
+    #main {
+      grid-area: main;
+      overflow-y: auto;
+      background: var(--bg-base);
+    }
+
+    #main::-webkit-scrollbar { width: 6px; }
+    #main::-webkit-scrollbar-track { background: transparent; }
+    #main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────────
+       DASHBOARD VIEW
+    ───────────────────────────────────────────── */
+    #view-dashboard {
+      padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .dashboard-header {
+      margin-bottom: 36px;
+    }
+
+    .dashboard-greeting {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-greeting em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .dashboard-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 520px;
+    }
+
+    /* Summary cards */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .summary-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+                  transform var(--transition-fast);
+    }
+
+    .summary-card:hover {
+      border-color: var(--border);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .summary-card.gold-accent {
+      border-color: var(--gold-dim);
+      background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(240,192,64,0.04) 100%);
+    }
+
+    .summary-card.gold-accent:hover {
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .card-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .card-value {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .card-value.gold { color: var(--gold); }
+
+    .card-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Overall progress section */
+    .dashboard-section {
+      margin-bottom: 32px;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    /* Big progress ring */
+    .progress-overview {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+    }
+
+    .progress-ring-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .progress-ring-svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      fill: none;
+      stroke: var(--bg-elevated);
+      stroke-width: 8;
+    }
+
+    .progress-ring-fill {
+      fill: none;
+      stroke: url(#goldGradient);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-ring-pct {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .progress-ring-sub {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .progress-overview-text { flex: 1; }
+
+    .progress-overview-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .progress-overview-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* Chapter progress list in dashboard */
+    .chapter-progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chapter-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cpr-name {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      width: 160px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cpr-bar { flex: 1; }
+
+    .cpr-pct {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      width: 36px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Start CTA */
+    .cta-card {
+      background: linear-gradient(135deg, var(--bg-elevated) 0%, rgba(240,192,64,0.08) 100%);
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .cta-card-text {}
+
+    .cta-card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .cta-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg-base);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 22px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background var(--transition-fast), transform var(--transition-fast),
+                  box-shadow var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dim);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    /* ─────────────────────────────────────────────
+       LOCK TOAST
+    ───────────────────────────────────────────── */
+    #lock-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+      z-index: 9999;
+      white-space: nowrap;
+    }
+
+    #lock-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─────────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────────── */
+    .text-gold { color: var(--gold); }
+    .font-mono { font-family: var(--font-mono); }
+
+    /* ─────────────────────────────────────────────
+       CHAPTER VIEW SHELL
+    ───────────────────────────────────────────── */
+    #view-chapter-1 { padding: 0; }
+
+    .ch-sticky-shell {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .ch-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 40px 20px;
+    }
+
+    .ch-breadcrumb {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+
+    .ch-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+
+    .ch-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 600px;
+      margin-bottom: 14px;
+    }
+
+    .ch-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .ch-meta-item {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ch-meta-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .ch-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ch-progress-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .ch-progress-track {
+      width: 240px;
+      height: 4px;
+      background: var(--bg-elevated);
+      border-radius: 99px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ch-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .ch-progress-pct {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--gold);
+      min-width: 34px;
+    }
+
+    /* Tab navigation */
+    .ch-tabs-nav {
+      display: flex;
+      gap: 0;
+      padding: 0 40px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ch-tab-btn {
+      padding: 11px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color var(--transition-fast), border-color var(--transition-fast);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ch-tab-btn:hover { color: var(--text-primary); }
+
+    .ch-tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .ch-tab-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-green);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      border-radius: 99px;
+      padding: 1px 6px;
+    }
+
+    .ch-tab-counter {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 1px 6px;
+    }
+
+    /* Tab content panels */
+    .ch-tab { display: none; }
+    .ch-tab.active { display: block; animation: fadeIn 0.2s ease forwards; }
+
+    /* ─────────────────────────────────────────────
+       LESSON CONTENT
+    ───────────────────────────────────────────── */
+    .lesson-content {
+      padding: 36px 40px 56px;
+      max-width: 820px;
+    }
+
+    .history-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 36px;
+    }
+
+    .history-card-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .history-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .history-card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .history-card p:last-child { margin-bottom: 0; }
+
+    .topic-section { margin-bottom: 36px; }
+
+    .topic-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .topic-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--gold-glow);
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .topic-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .topic-body {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.85;
+    }
+
+    .topic-body p { margin-bottom: 9px; }
+    .topic-body p:last-child { margin-bottom: 0; }
+
+    .formula-block {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 14px 0;
+      overflow-x: auto;
+    }
+
+    .formula-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .formula-block .katex-display { margin: 0; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .app-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .app-card:hover {
+      border-color: var(--gold-dim);
+      box-shadow: var(--shadow-md);
+    }
+
+    .app-card-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+
+    .app-card-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .app-card-body {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .app-card-body p { margin-bottom: 8px; }
+    .app-card-body p:last-child { margin-bottom: 0; }
+
+    .worked-example {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+
+    .we-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .we-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .we-question {
+      font-size: 0.925rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.55;
+    }
+
+    .we-difficulty {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+
+    .diff-easy   { background: rgba(76,175,134,0.15); color: var(--accent-green); }
+    .diff-medium { background: rgba(74,144,217,0.15); color: var(--accent-blue); }
+    .diff-hard   { background: rgba(240,192,64,0.15); color: var(--gold); }
+
+    .we-steps {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .we-step { display: flex; gap: 14px; align-items: flex-start; }
+
+    .we-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .we-step-body {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      flex: 1;
+    }
+
+    .we-answer {
+      margin-top: 14px;
+      background: rgba(76,175,134,0.07);
+      border: 1px solid rgba(76,175,134,0.22);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      color: var(--accent-green);
+      font-weight: 500;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 28px 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       EXERCISES
+    ───────────────────────────────────────────── */
+    .exercises-content {
+      padding: 28px 40px 56px;
+      max-width: 820px;
+    }
+
+    .exercises-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .exercises-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .exercises-score-text {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--gold);
+    }
+
+    .exercises-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .difficulty-legend {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .dl-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .ex-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      transition: border-color var(--transition-fast);
+    }
+
+    .ex-card.answered-correct  { border-color: var(--accent-green); background: rgba(76,175,134,0.03); }
+    .ex-card.answered-incorrect { border-color: var(--accent-red);   background: rgba(224,92,92,0.03); }
+
+    .ex-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ex-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .answered-correct  .ex-num { background: rgba(76,175,134,0.12); color: var(--accent-green); border-color: rgba(76,175,134,0.3); }
+    .answered-incorrect .ex-num { background: rgba(224,92,92,0.10);  color: var(--accent-red);   border-color: rgba(224,92,92,0.3); }
+
+    .ex-question {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* MC options */
+    .mc-options {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .mc-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      user-select: none;
+    }
+
+    .mc-option:hover:not(.opt-disabled) { background: var(--bg-hover); border-color: var(--gold-dim); }
+    .mc-option.opt-selected  { border-color: var(--gold-dim); background: var(--gold-glow); }
+    .mc-option.opt-correct   { border-color: var(--accent-green); background: rgba(76,175,134,0.09); }
+    .mc-option.opt-wrong     { border-color: var(--accent-red);   background: rgba(224,92,92,0.07); }
+    .mc-option.opt-disabled  { cursor: default; }
+
+    .mc-letter {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .opt-selected .mc-letter { background: var(--gold);          border-color: var(--gold);          color: var(--bg-base); }
+    .opt-correct  .mc-letter { background: var(--accent-green);  border-color: var(--accent-green);  color: #fff; }
+    .opt-wrong    .mc-letter { background: var(--accent-red);    border-color: var(--accent-red);    color: #fff; }
+
+    .mc-text { font-size: 0.875rem; color: var(--text-primary); }
+
+    /* Fill-in-the-blank */
+    .fill-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .fill-wrap-label { font-size: 0.875rem; color: var(--text-secondary); }
+
+    .fill-input {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      width: 150px;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .fill-input:focus  { border-color: var(--gold-dim); }
+    .fill-input.fi-correct { border-color: var(--accent-green); background: rgba(76,175,134,0.06); color: var(--accent-green); }
+    .fill-input.fi-wrong   { border-color: var(--accent-red);   background: rgba(224,92,92,0.05);  color: var(--accent-red); }
+    .fill-input:disabled   { cursor: default; }
+
+    .btn-check {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 8px 16px;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .btn-check:hover:not(:disabled) { background: var(--bg-hover); border-color: var(--gold-dim); color: var(--gold); }
+    .btn-check:disabled { opacity: 0.45; cursor: default; }
+
+    .ex-action-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .xp-reward {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-glow);
+      border: 1px solid rgba(240,192,64,0.25);
+      border-radius: 99px;
+      padding: 2px 8px;
+    }
+
+    /* Feedback */
+    .feedback-box {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .feedback-box.show { display: block; }
+
+    .feedback-box.fb-correct {
+      background: rgba(76,175,134,0.09);
+      border: 1px solid rgba(76,175,134,0.22);
+      color: var(--accent-green);
+    }
+
+    .feedback-box.fb-incorrect {
+      background: rgba(224,92,92,0.07);
+      border: 1px solid rgba(224,92,92,0.18);
+      color: var(--text-secondary);
+    }
+
+    .fb-icon { font-weight: 700; margin-right: 4px; }
+    .fb-expl { color: var(--text-secondary); margin-top: 5px; font-size: 0.79rem; line-height: 1.65; }
+
+    /* ─────────────────────────────────────────────
+       QUIZ
+    ───────────────────────────────────────────── */
+    .quiz-content {
+      padding: 28px 40px 56px;
+      max-width: 820px;
+    }
+
+    .quiz-header { margin-bottom: 28px; }
+
+    .quiz-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .quiz-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .quiz-rules { display: flex; gap: 18px; flex-wrap: wrap; }
+
+    .quiz-rule {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .quiz-rule-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    .quiz-form.hidden { display: none; }
+
+    .quiz-q {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .quiz-q-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .quiz-q-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-glow);
+      border: 1px solid rgba(240,192,64,0.22);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .quiz-q-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* quiz uses label-wrapped radio options */
+    .quiz-q .mc-option { cursor: pointer; }
+
+    .quiz-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    .quiz-result {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      text-align: center;
+    }
+
+    .quiz-result.show { display: block; animation: fadeIn 0.3s ease forwards; }
+
+    .quiz-result-icon { font-size: 2.8rem; margin-bottom: 14px; display: block; }
+
+    .quiz-result-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .qrt-pass { color: var(--accent-green); }
+    .qrt-fail { color: var(--accent-red); }
+
+    .quiz-result-score {
+      font-family: var(--font-mono);
+      font-size: 2.6rem;
+      font-weight: 500;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .quiz-result-msg {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 460px;
+      margin: 0 auto 22px;
+    }
+
+    .quiz-unlock-banner {
+      display: none;
+      background: rgba(76,175,134,0.09);
+      border: 1px solid rgba(76,175,134,0.28);
+      border-radius: var(--radius-md);
+      padding: 13px 20px;
+      margin-top: 16px;
+      font-size: 0.875rem;
+      color: var(--accent-green);
+      font-weight: 500;
+    }
+
+    .quiz-unlock-banner.show { display: block; }
+
+    .btn-retry {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 22px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .btn-retry:hover { background: var(--bg-hover); border-color: var(--gold-dim); color: var(--text-primary); }
+
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ─── TOP BAR ──────────────────────────────── -->
+  <header id="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-brand-icon">∑</div>
+      <span class="topbar-brand-name">Mathemati<span>ca</span></span>
+    </div>
+
+    <div class="topbar-divider"></div>
+
+    <div class="topbar-progress-wrap">
+      <span class="topbar-progress-label">Overall</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="topbar-progress-fill"></div>
+      </div>
+      <span class="topbar-progress-pct" id="topbar-progress-pct">0%</span>
+    </div>
+
+    <div class="streak-badge" title="Day streak">
+      <span class="streak-flame">🔥</span>
+      <span class="streak-count" id="streak-count">0</span>
+      <span class="streak-label">day streak</span>
+    </div>
+
+    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
+      <!-- Moon icon (shown in dark mode) -->
+      <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <!-- Sun icon (shown in light mode, hidden by default) -->
+      <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           style="display:none;">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ─── SIDEBAR ──────────────────────────────── -->
+  <nav id="sidebar">
+    <div class="sidebar-section-label">Navigation</div>
+
+    <a class="nav-item active" data-view="dashboard" onclick="navigateTo('dashboard')">
+      <svg class="nav-item-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <span class="nav-item-text">Dashboard</span>
+    </a>
+
+    <div class="sidebar-sep"></div>
+    <div class="sidebar-section-label">Chapters</div>
+
+    <div class="chapter-list" id="chapter-list">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-stats">
+        <div class="stat-pill">
+          <span class="stat-pill-value" id="stat-lessons">0</span>
+          <span class="stat-pill-label">Lessons</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-value" id="stat-exercises">0</span>
+          <span class="stat-pill-label">Exercises</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-value" id="stat-xp">0</span>
+          <span class="stat-pill-label">XP</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ─────────────────────────── -->
+  <main id="main">
+
+    <!-- Dashboard View -->
+    <section id="view-dashboard" class="view active">
+      <div class="dashboard-header">
+        <h1 class="dashboard-greeting">Welcome back, <em>Scholar.</em></h1>
+        <p class="dashboard-subtitle">
+          Your journey through mathematics continues. Each proof you master brings you
+          closer to understanding the language of the universe.
+        </p>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="dashboard-cards">
+        <div class="summary-card gold-accent">
+          <div class="card-label">Overall Progress</div>
+          <div class="card-value gold" id="dash-pct">0%</div>
+          <div class="card-sub">across all chapters</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-label">Chapters Completed</div>
+          <div class="card-value" id="dash-chapters">0 / 8</div>
+          <div class="card-sub">chapters finished</div>
+        </div>
+        <div class="summary-card">
+          <div class="card-label">Current Streak</div>
+          <div class="card-value" id="dash-streak">0</div>
+          <div class="card-sub">consecutive days</div>
+        </div>
+      </div>
+
+      <!-- Progress Overview -->
+      <div class="dashboard-section">
+        <h2 class="section-heading">Progress Overview</h2>
+        <div class="progress-overview">
+
+          <!-- SVG ring -->
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring-svg" width="100" height="100" id="ring-svg">
+              <defs>
+                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#C8A030;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#F0C040;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <circle class="progress-ring-bg" cx="50" cy="50" r="40"/>
+              <circle class="progress-ring-fill" cx="50" cy="50" r="40"
+                id="ring-fill"
+                stroke-dasharray="251.2"
+                stroke-dashoffset="251.2"/>
+            </svg>
+            <div class="progress-ring-center">
+              <span class="progress-ring-pct" id="ring-pct">0%</span>
+              <span class="progress-ring-sub">done</span>
+            </div>
+          </div>
+
+          <div class="progress-overview-text">
+            <div class="progress-overview-title">Your mathematical journey</div>
+            <p class="progress-overview-desc">
+              Begin with the fundamentals and work your way through algebra, geometry,
+              calculus, and beyond. Each chapter builds upon the last.
+            </p>
+            <div class="chapter-progress-list" id="chapter-progress-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="dashboard-section">
+        <div class="cta-card">
+          <div class="cta-card-text">
+            <div class="cta-card-title">Continue Chapter 1 — Foundations</div>
+            <p class="cta-card-desc">
+              Start with number systems, basic operations, and the building blocks of
+              mathematical reasoning.
+            </p>
+          </div>
+          <button class="btn-primary" onclick="navigateTo('chapter-1')">
+            Begin Learning →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CHAPTER 1: ARITHMETIC ──────────────── -->
+    <section id="view-chapter-1" class="view">
+
+      <!-- Sticky shell: header + tab nav stick together -->
+      <div class="ch-sticky-shell">
+      <div class="ch-header">
+        <div class="ch-breadcrumb">Chapter 1 &middot; Arithmetic</div>
+        <h1 class="ch-title">Arithmetic</h1>
+        <p class="ch-desc">The ancient art of counting, measuring, and reasoning with numbers. Master these foundations and every mathematical door opens to you.</p>
+        <div class="ch-meta">
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>5 topics</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>10 exercises</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>1 quiz &middot; 5 questions</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>Unlock next: 80% exercises + quiz pass</span>
+        </div>
+        <div class="ch-progress-row">
+          <span class="ch-progress-label">Exercise progress</span>
+          <div class="ch-progress-track"><div class="ch-progress-fill" id="ch1-header-progress-fill" style="width:0%"></div></div>
+          <span class="ch-progress-pct" id="ch1-header-progress-pct">0%</span>
+        </div>
+      </div>
+
+      <!-- Tab nav (inside sticky shell) -->
+      <div class="ch-tabs-nav">
+        <button class="ch-tab-btn active" data-tab="lesson" onclick="switchTab('lesson')">Lesson</button>
+        <button class="ch-tab-btn" data-tab="exercises" onclick="switchTab('exercises')">
+          Exercises&nbsp;<span class="ch-tab-counter" id="ch1-ex-counter">0/10</span>
+        </button>
+        <button class="ch-tab-btn" data-tab="quiz" onclick="switchTab('quiz')">
+          Quiz&nbsp;<span class="ch-tab-badge" id="ch1-quiz-badge" style="display:none">PASSED</span>
+        </button>
+      </div>
+      </div><!-- .ch-sticky-shell -->
+
+      <!-- ═══ TAB: LESSON ═══════════════════════════ -->
+      <div id="tab-lesson" class="ch-tab active" data-tab="lesson">
+        <div class="lesson-content">
+
+          <!-- History -->
+          <div class="history-card">
+            <div class="history-card-label">History of Arithmetic</div>
+            <h3>From Babylon to Baghdad</h3>
+            <p>Arithmetic is humanity's oldest mathematical discipline. The <strong>Babylonians</strong> (c.&nbsp;2000&nbsp;BCE) developed a sophisticated base&#8209;60 number system used to track grain stores, calculate land area, and predict celestial events. Clay tablets like the famous <em>Plimpton 322</em> reveal they understood Pythagorean triples over 1,000 years before Pythagoras.</p>
+            <p>In the 9th century CE, the Persian polymath <strong>Mu&#7717;ammad ibn M&#363;s&#257; al-Khw&#257;rizm&#299;</strong> wrote <em>Kit&#257;b al-mukhtasar f&#299; &#7717;is&#257;b al-jabr wa&#700;l-muq&#257;bala</em>, the treatise whose title gave us the word <em>algebra</em>. His earlier work <em>On the Calculation with Hindu Numerals</em> introduced the Hindu-Arabic numeral system (0&ndash;9) to the Islamic world and eventually Europe, replacing cumbersome Roman numerals. The very word <em>algorithm</em> is a Latinisation of al-Khw&#257;rizm&#299;'s name.</p>
+          </div>
+
+          <!-- Topic 1: Integers -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">01</div>
+              <h2 class="topic-title">Integers</h2>
+            </div>
+            <div class="topic-body">
+              <p>Integers are the complete set of whole numbers and their negatives: $\{\ldots,\,-3,\,-2,\,-1,\,0,\,1,\,2,\,3,\,\ldots\}$. They extend infinitely in both directions and contain no fractional part.</p>
+              <p>The <strong>absolute value</strong> $|x|$ measures distance from zero — it strips the sign:</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Absolute Value</div>
+              $$|x| = \begin{cases} x & \text{if } x \ge 0 \\ -x & \text{if } x < 0 \end{cases}$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Signed arithmetic rules:</strong></p>
+              <p>Adding a negative equals subtracting its positive: $\;5 + (-3) = 5 - 3 = 2$</p>
+              <p>Two negatives multiply to a positive: $\;(-4)\times(-3) = +12$</p>
+              <p>A positive times a negative gives a negative: $\;(-4)\times 3 = -12$</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 2: Fractions -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">02</div>
+              <h2 class="topic-title">Fractions</h2>
+            </div>
+            <div class="topic-body">
+              <p>A fraction $\dfrac{a}{b}$ represents the division of $a$ (the <em>numerator</em>) by $b$ (the <em>denominator</em>), where $b \ne 0$.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">The Four Operations on Fractions</div>
+              $$\frac{a}{b} + \frac{c}{d} = \frac{ad+bc}{bd} \qquad \frac{a}{b} - \frac{c}{d} = \frac{ad-bc}{bd}$$
+              $$\frac{a}{b} \times \frac{c}{d} = \frac{ac}{bd} \qquad \frac{a}{b} \div \frac{c}{d} = \frac{a}{b}\times\frac{d}{c} = \frac{ad}{bc}$$
+            </div>
+            <div class="topic-body">
+              <p>When adding fractions, always find the <strong>lowest common denominator (LCD)</strong>. For $\frac{1}{4} + \frac{1}{6}$, the LCD is 12, giving $\frac{3}{12} + \frac{2}{12} = \frac{5}{12}$.</p>
+              <p>A fraction is in <strong>lowest terms</strong> when $\gcd(\text{numerator}, \text{denominator}) = 1$. For $\frac{6}{8}$: $\gcd(6,8)=2$, so $\frac{6}{8} = \frac{3}{4}$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 3: Decimals -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">03</div>
+              <h2 class="topic-title">Decimals</h2>
+            </div>
+            <div class="topic-body">
+              <p>Decimals express fractions using powers of 10. Each position to the right of the decimal point represents $10^{-1}$ (tenths), $10^{-2}$ (hundredths), $10^{-3}$ (thousandths), and so on.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Common Fraction–Decimal Conversions</div>
+              $$\frac{3}{4} = 0.75 \qquad \frac{1}{3} = 0.\overline{3} \qquad \frac{7}{8} = 0.875 \qquad \frac{1}{6} = 0.1\overline{6}$$
+            </div>
+            <div class="topic-body">
+              <p>A decimal <strong>terminates</strong> (e.g.&nbsp;$0.75$) when the denominator's only prime factors are 2 and 5. Otherwise it <strong>repeats</strong> (e.g.&nbsp;$0.\overline{3}$).</p>
+              <p><strong>Converting a repeating decimal to a fraction:</strong> Let $x = 0.\overline{3}$. Then $10x = 3.\overline{3}$, so $9x = 3$ and $x = \frac{1}{3}$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 4: PEMDAS -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">04</div>
+              <h2 class="topic-title">Order of Operations (PEMDAS)</h2>
+            </div>
+            <div class="topic-body">
+              <p>When an expression contains multiple operations, a strict hierarchy determines which is evaluated first. Without it, $2 + 3 \times 4$ would be ambiguous.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">PEMDAS Priority — highest to lowest</div>
+              $$\underbrace{\mathbf{P}}_{\text{Parentheses}} \;\to\; \underbrace{\mathbf{E}}_{\text{Exponents}} \;\to\; \underbrace{\mathbf{MD}}_{\text{Mult / Div}\;(\text{left} \to \text{right})} \;\to\; \underbrace{\mathbf{AS}}_{\text{Add / Sub}\;(\text{left} \to \text{right})}$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Worked trace:</strong> Evaluate $2 + 3 \times 4^2 \div (6-2)$</p>
+              <p>$\to$ Parentheses: $2 + 3 \times 4^2 \div 4$</p>
+              <p>$\to$ Exponents: $2 + 3 \times 16 \div 4$</p>
+              <p>$\to$ Mult/Div left to right: $2 + 48 \div 4 = 2 + 12$</p>
+              <p>$\to$ Addition: $= 14$</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 5: Percentages -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">05</div>
+              <h2 class="topic-title">Percentages</h2>
+            </div>
+            <div class="topic-body">
+              <p>A percentage expresses a number as a fraction of 100. The word derives from Latin <em>per centum</em> — "per hundred." The symbol % is shorthand for $\div 100$.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Core Percentage Formulas</div>
+              $$\text{Percentage} = \frac{\text{Part}}{\text{Whole}} \times 100 \qquad p\%\ \text{of}\ x = \frac{p}{100} \times x$$
+              $$\text{Percentage change} = \frac{\text{New} - \text{Old}}{\lvert\text{Old}\rvert} \times 100$$
+            </div>
+            <div class="topic-body">
+              <p>To find 35% of 80: $\;\frac{35}{100}\times 80 = 0.35 \times 80 = 28$.</p>
+              <p><strong>Warning:</strong> A 20% increase followed by a 20% decrease does <em>not</em> return to the original: $1.2 \times 0.8 = 0.96$&nbsp;— a net 4% loss. Order matters.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Real-life Applications -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Real-Life Applications</h2>
+          <div class="app-grid">
+            <div class="app-card">
+              <span class="app-card-icon">&#128176;</span>
+              <div class="app-card-title">Personal Finance</div>
+              <div class="app-card-body">
+                <p>Simple interest follows $I = P \cdot r \cdot t$, where $P$ is principal, $r$ is annual rate, and $t$ is years. Investing $\$1{,}000$ at 5% for 3 years earns $I = 1000 \times 0.05 \times 3 = \$150$.</p>
+                <p>Arithmetic underlies every financial decision: sales tax ($\text{price}\times 1.08$), discounts ($\text{price}\times(1-r)$), tipping, and comparing loan rates all rely on percentages and decimals.</p>
+              </div>
+            </div>
+            <div class="app-card">
+              <span class="app-card-icon">&#127859;</span>
+              <div class="app-card-title">Cooking &amp; Scaling</div>
+              <div class="app-card-body">
+                <p>Recipes are ratio problems in disguise. Scaling a recipe for 4 up to serve 10 requires multiplying each ingredient by $\frac{10}{4} = 2.5$. If the original calls for $\frac{2}{3}$ cup of sugar: $\;\frac{2}{3}\times 2.5 = \frac{5}{3} = 1\frac{2}{3}$ cups.</p>
+                <p>Unit conversions (oz&nbsp;&rarr;&nbsp;g, &deg;F&nbsp;&rarr;&nbsp;&deg;C) are linear arithmetic operations applied millions of times daily in kitchens and labs worldwide.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Worked Examples -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Worked Examples</h2>
+
+          <!-- Example 1 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 1</div>
+                <div class="we-question">Evaluate: $3 + 4 \times (2^3 - 5) \div 6$</div>
+              </div>
+              <span class="we-difficulty diff-easy">Easy</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Parentheses:</strong> evaluate $2^3 - 5$ first. $\;2^3 = 8$, so $8 - 5 = 3$.<br>Expression: $\;3 + 4 \times 3 \div 6$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Mult/Div left to right:</strong> $4 \times 3 = 12$, then $12 \div 6 = 2$.<br>Expression: $\;3 + 2$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Addition:</strong> $3 + 2 = 5$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: $\;3 + 4 \times (2^3 - 5) \div 6 = \mathbf{5}$</div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 2</div>
+                <div class="we-question">Add: $\dfrac{2}{3} + \dfrac{5}{8}$</div>
+              </div>
+              <span class="we-difficulty diff-medium">Medium</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Find the LCD</strong> of 3 and 8. Since $\gcd(3,8)=1$, the LCD $= 3 \times 8 = 24$.</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Convert to common denominator:</strong><br>$\dfrac{2}{3} = \dfrac{16}{24}$ &nbsp;&nbsp; and &nbsp;&nbsp; $\dfrac{5}{8} = \dfrac{15}{24}$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Add numerators:</strong> $\dfrac{16}{24} + \dfrac{15}{24} = \dfrac{31}{24}$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">4</div>
+                <div class="we-step-body"><strong>Simplify:</strong> $\gcd(31,24)=1$, already in lowest terms. As a mixed number: $\dfrac{31}{24} = 1\dfrac{7}{24}$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: $\dfrac{2}{3} + \dfrac{5}{8} = \dfrac{31}{24} = 1\dfrac{7}{24}$</div>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 3</div>
+                <div class="we-question">A jacket originally costs $\$120$. It is discounted 35%, then the sale price is taxed at 8%. What is the final price?</div>
+              </div>
+              <span class="we-difficulty diff-hard">Hard</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Calculate discount amount:</strong> $35\%\ \text{of}\ \$120 = 0.35 \times 120 = \$42$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Sale price after discount:</strong> $\$120 - \$42 = \$78$ &nbsp; (equivalently: $120 \times 0.65 = \$78$)</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Apply 8% tax:</strong> $\$78 \times 1.08 = \$84.24$</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: Final price $= \mathbf{\$84.24}$</div>
+          </div>
+
+        </div><!-- .lesson-content -->
+      </div><!-- #tab-lesson -->
+
+
+      <!-- ═══ TAB: EXERCISES ════════════════════════ -->
+      <div id="tab-exercises" class="ch-tab" data-tab="exercises">
+        <div class="exercises-content">
+          <div class="exercises-header">
+            <div class="exercises-title">Practice Exercises</div>
+            <div class="exercises-score-text" id="ch1-ex-score-text">0 / 10 correct</div>
+          </div>
+          <p class="exercises-desc">Answer at least 8 out of 10 correctly (80%) to qualify for the chapter quiz.</p>
+          <div class="ch-progress-row" style="margin-bottom:20px;">
+            <span class="ch-progress-label">Score</span>
+            <div class="ch-progress-track" style="width:auto;flex:1;max-width:340px;"><div class="ch-progress-fill" id="ch1-ex-progress-fill" style="width:0%"></div></div>
+            <span class="ch-progress-pct" id="ch1-ex-progress-pct">0%</span>
+          </div>
+          <div class="difficulty-legend">
+            <span class="dl-item"><span class="we-difficulty diff-easy">Easy</span>&nbsp;Q1–3</span>
+            <span class="dl-item"><span class="we-difficulty diff-medium">Medium</span>&nbsp;Q4–7</span>
+            <span class="dl-item"><span class="we-difficulty diff-hard">Hard</span>&nbsp;Q8–10</span>
+          </div>
+
+          <!-- Q1 -->
+          <div class="ex-card" id="ex-1" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q1</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">What is $-5 + 8\,$?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('1',this)"><div class="mc-letter">A</div><span class="mc-text">$-13$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption('1',this)"><div class="mc-letter">B</div><span class="mc-text">$-3$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption('1',this)"><div class="mc-letter">C</div><span class="mc-text">$3$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption('1',this)"><div class="mc-letter">D</div><span class="mc-text">$13$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('1')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $-5+8=3$. The larger absolute value is 8 (positive), so the result is positive: $8-5=3$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: $3$</strong>.<div class="fb-expl">A ($-13$): you added absolute values with a negative sign — wrong.<br>B ($-3$): right magnitude, wrong sign; the dominant term is $+8$, making the result positive.<br>D ($13$): the negative sign on $-5$ was ignored entirely.</div></div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="ex-card" id="ex-2" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q2</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">Evaluate $2 + 3 \times 4$ using the correct order of operations.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('2',this)"><div class="mc-letter">A</div><span class="mc-text">$20$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption('2',this)"><div class="mc-letter">B</div><span class="mc-text">$14$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption('2',this)"><div class="mc-letter">C</div><span class="mc-text">$24$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption('2',this)"><div class="mc-letter">D</div><span class="mc-text">$10$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('2')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Multiply first: $3\times4=12$, then add: $2+12=14$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: $14$</strong>.<div class="fb-expl">A ($20$): you added first — $(2+3)\times4=20$. PEMDAS says multiplication before addition.<br>C ($24$): perhaps computed $2\times3\times4$ by accident.<br>D ($10$): arithmetic error somewhere in the chain.</div></div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="ex-card" id="ex-3" data-type="fill" data-answer="0.5" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q3</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">Convert $\dfrac{1}{2}$ to a decimal.</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">$\dfrac{1}{2}\;=\;$</span>
+              <input class="fill-input" type="text" placeholder="0.___" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('3')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $\frac{1}{2} = 1\div 2 = 0.5$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>0.5</strong>.<div class="fb-expl">Divide numerator by denominator: $1\div2=0.5$. Common errors: writing $2$ (inverted), $0.12$ (treating digits as separate), or $50$ (forgetting the decimal).</div></div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="ex-card" id="ex-4" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q4</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Simplify: $\dfrac{3}{4} + \dfrac{1}{6}$</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('4',this)"><div class="mc-letter">A</div><span class="mc-text">$\dfrac{4}{10}$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption('4',this)"><div class="mc-letter">B</div><span class="mc-text">$\dfrac{2}{5}$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption('4',this)"><div class="mc-letter">C</div><span class="mc-text">$\dfrac{11}{12}$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption('4',this)"><div class="mc-letter">D</div><span class="mc-text">$\dfrac{7}{8}$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('4')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! LCD of 4 and 6 is 12: $\frac{9}{12}+\frac{2}{12}=\frac{11}{12}$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: $\frac{11}{12}$</strong>.<div class="fb-expl">Convert to LCD&nbsp;12: $\frac{3}{4}=\frac{9}{12}$, $\frac{1}{6}=\frac{2}{12}$, sum $=\frac{11}{12}$.<br>A &amp; B: you added numerators (3+1=4) and denominators (4+6=10) directly — this is never valid.<br>D: incorrect common denominator used.</div></div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="ex-card" id="ex-5" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q5</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">What is 15% of 80?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('5',this)"><div class="mc-letter">A</div><span class="mc-text">$15$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption('5',this)"><div class="mc-letter">B</div><span class="mc-text">$10$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption('5',this)"><div class="mc-letter">C</div><span class="mc-text">$18$</span></div>
+              <div class="mc-option" data-value="D" data-correct="true"  onclick="selectMCOption('5',this)"><div class="mc-letter">D</div><span class="mc-text">$12$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('5')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $\frac{15}{100}\times80 = 0.15\times80 = 12$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>D: $12$</strong>.<div class="fb-expl">A ($15$): returned the percentage itself, not 15% of 80.<br>B ($10$): that's 10% of 100, not 15% of 80.<br>C ($18$): $18 = 15\%\text{ of }120$, not 80 — check your multiplier.</div></div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="ex-card" id="ex-6" data-type="fill" data-answer="9" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q6</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Evaluate using PEMDAS: $2^3 + 4 \div 2 - 1$</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">$2^3+4\div2-1\;=\;$</span>
+              <input class="fill-input" type="text" placeholder="?" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('6')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Exponent: $2^3=8$. Division: $4\div2=2$. Then: $8+2-1=9$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>9</strong>.<div class="fb-expl">Step by step: (1)&nbsp;$2^3=8$, (2)&nbsp;$4\div2=2$, (3)&nbsp;$8+2-1=9$. Doing the exponent or division out of order leads to wrong answers.</div></div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="ex-card" id="ex-7" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q7</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Which fraction is equivalent to $0.75\,$?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('7',this)"><div class="mc-letter">A</div><span class="mc-text">$\dfrac{3}{5}$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption('7',this)"><div class="mc-letter">B</div><span class="mc-text">$\dfrac{7}{10}$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption('7',this)"><div class="mc-letter">C</div><span class="mc-text">$\dfrac{4}{5}$</span></div>
+              <div class="mc-option" data-value="D" data-correct="true"  onclick="selectMCOption('7',this)"><div class="mc-letter">D</div><span class="mc-text">$\dfrac{3}{4}$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('7')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $0.75=\frac{75}{100}=\frac{3}{4}$. Verify: $3\div4=0.75$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>D: $\frac{3}{4}$</strong>.<div class="fb-expl">A: $3\div5=0.6\ne0.75$. &nbsp; B: $7\div10=0.70\ne0.75$. &nbsp; C: $4\div5=0.8\ne0.75$. Convert: $0.75=\frac{75}{100}$, divide numerator &amp; denominator by 25 → $\frac{3}{4}$.</div></div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="ex-card" id="ex-8" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q8</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">A recipe needs $2\tfrac{1}{3}$ cups of flour. To make $1.5\times$ the recipe, how much flour is needed?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('8',this)"><div class="mc-letter">A</div><span class="mc-text">$3$ cups</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption('8',this)"><div class="mc-letter">B</div><span class="mc-text">$3\tfrac{1}{2}$ cups</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption('8',this)"><div class="mc-letter">C</div><span class="mc-text">$3\tfrac{1}{3}$ cups</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption('8',this)"><div class="mc-letter">D</div><span class="mc-text">$4$ cups</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('8')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $2\tfrac{1}{3}\times\tfrac{3}{2}=\tfrac{7}{3}\times\tfrac{3}{2}=\tfrac{7}{2}=3\tfrac{1}{2}$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: $3\tfrac{1}{2}$</strong>.<div class="fb-expl">Convert to improper fraction: $2\tfrac{1}{3}=\tfrac{7}{3}$. Multiply by $\tfrac{3}{2}$: $\tfrac{7}{3}\times\tfrac{3}{2}=\tfrac{21}{6}=\tfrac{7}{2}=3\tfrac{1}{2}$.<br>A: only scaled the whole number part. &nbsp; C: added 1 instead of multiplying. &nbsp; D: over-estimated.</div></div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="ex-card" id="ex-9" data-type="fill" data-answer="38.88" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q9</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">An item costs $\$45$, discounted 20%, then taxed at 8%. What is the final price (in dollars)?</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">Final price $= \$$</span>
+              <input class="fill-input" type="text" placeholder="0.00" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('9')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $\$45\times0.80=\$36$, then $\$36\times1.08=\$38.88$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>$38.88</strong>.<div class="fb-expl">Step 1 — discount: $45\times(1-0.20)=45\times0.80=36$. Step 2 — tax: $36\times1.08=38.88$. Common errors: applying tax to the original price, or reversing the order of operations.</div></div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="ex-card" id="ex-10" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q10</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">Evaluate: $\;|-12| \div (2^2 - 1) \times (-1)^3 + 7$</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption('10',this)"><div class="mc-letter">A</div><span class="mc-text">$-1$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption('10',this)"><div class="mc-letter">B</div><span class="mc-text">$11$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption('10',this)"><div class="mc-letter">C</div><span class="mc-text">$-5$</span></div>
+              <div class="mc-option" data-value="D" data-correct="true"  onclick="selectMCOption('10',this)"><div class="mc-letter">D</div><span class="mc-text">$3$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise('10')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $12\div3\times(-1)+7 = 4\times(-1)+7 = -4+7 = 3$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>D: $3$</strong>.<div class="fb-expl">(1)&nbsp;$|-12|=12$, (2)&nbsp;$2^2-1=3$, (3)&nbsp;$(-1)^3=-1$, (4)&nbsp;$12\div3\times(-1)=-4$ (left-to-right), (5)&nbsp;$-4+7=3$.<br>B ($11$): treated $(-1)^3$ as $+1$. &nbsp; A &amp; C: wrong grouping or order in step&nbsp;4.</div></div>
+          </div>
+
+        </div><!-- .exercises-content -->
+      </div><!-- #tab-exercises -->
+
+
+      <!-- ═══ TAB: QUIZ ════════════════════════════ -->
+      <div id="tab-quiz" class="ch-tab" data-tab="quiz">
+        <div class="quiz-content">
+          <div class="quiz-header">
+            <div class="quiz-title">Chapter 1 Quiz</div>
+            <p class="quiz-desc">5 questions spanning all topics. Score at least 4/5 (80%) to pass. Combined with 80% on exercises, a passing score unlocks Chapter 2 — Algebra I.</p>
+            <div class="quiz-rules">
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>5 multiple-choice questions</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Pass mark: 4 out of 5</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Can be retaken if failed</div>
+            </div>
+          </div>
+
+          <div id="quiz-form" class="quiz-form">
+
+            <!-- Quiz Q1 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q1</span>
+                <div class="quiz-q-text">Evaluate $\;-3 \times (-4) + 2^2$.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuizOpt(this,'q1')"><input type="radio" name="q1" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$8$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q1')"><input type="radio" name="q1" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$16$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q1')"><input type="radio" name="q1" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$4$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q1')"><input type="radio" name="q1" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$-8$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q2 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q2</span>
+                <div class="quiz-q-text">Express $\dfrac{5}{8}$ as a percentage.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuizOpt(this,'q2')"><input type="radio" name="q2" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$58\%$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q2')"><input type="radio" name="q2" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$0.625\%$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q2')"><input type="radio" name="q2" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$62.5\%$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q2')"><input type="radio" name="q2" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$80\%$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q3 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q3</span>
+                <div class="quiz-q-text">Evaluate using PEMDAS: $\;10 - 2 \times 3 + (4 \div 2)^2$</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuizOpt(this,'q3')"><input type="radio" name="q3" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$8$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q3')"><input type="radio" name="q3" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$28$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q3')"><input type="radio" name="q3" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$26$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q3')"><input type="radio" name="q3" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$6$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q4 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q4</span>
+                <div class="quiz-q-text">A bank account earns 5% simple interest on $\$200$ for 3 years. What is the total interest earned?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuizOpt(this,'q4')"><input type="radio" name="q4" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$\$10$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q4')"><input type="radio" name="q4" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$\$30$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q4')"><input type="radio" name="q4" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$\$60$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q4')"><input type="radio" name="q4" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$\$15$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q5 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q5</span>
+                <div class="quiz-q-text">Express $0.125$ as a fraction in lowest terms.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuizOpt(this,'q5')"><input type="radio" name="q5" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$\dfrac{1}{4}$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q5')"><input type="radio" name="q5" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$\dfrac{1}{5}$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q5')"><input type="radio" name="q5" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$\dfrac{1}{8}$</span></label>
+                <label class="mc-option" onclick="selectQuizOpt(this,'q5')"><input type="radio" name="q5" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$\dfrac{3}{16}$</span></label>
+              </div>
+            </div>
+
+            <div class="quiz-submit-row">
+              <button class="btn-primary" onclick="submitQuiz()">Submit Quiz</button>
+            </div>
+          </div><!-- #quiz-form -->
+
+          <!-- Result panel -->
+          <div id="quiz-result" class="quiz-result">
+            <span class="quiz-result-icon" id="quiz-result-icon">&#127891;</span>
+            <div class="quiz-result-title" id="quiz-result-title">Excellent Work!</div>
+            <span class="quiz-result-score" id="quiz-result-score">5 / 5</span>
+            <p class="quiz-result-msg" id="quiz-result-msg"></p>
+            <button class="btn-retry" onclick="retryQuiz()">Retake Quiz</button>
+            <div class="quiz-unlock-banner" id="quiz-unlock-banner"></div>
+          </div>
+
+        </div><!-- .quiz-content -->
+      </div><!-- #tab-quiz -->
+
+    </section><!-- #view-chapter-1 -->
+
+    <!-- ─── CHAPTER 2: ALGEBRA I ──────────────── -->
+    <section id="view-chapter-2" class="view">
+
+      <div class="ch-sticky-shell">
+      <div class="ch-header">
+        <div class="ch-breadcrumb">Chapter 2 &middot; Algebra I</div>
+        <h1 class="ch-title">Algebra I</h1>
+        <p class="ch-desc">The language of unknowns. Learn to form equations, solve for variables, and reason about relationships — the toolkit every mathematician and scientist relies on.</p>
+        <div class="ch-meta">
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>4 topics</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>10 exercises</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>1 quiz &middot; 5 questions</span>
+          <span class="ch-meta-item"><span class="ch-meta-dot"></span>Unlock next: 80% exercises + quiz pass</span>
+        </div>
+        <div class="ch-progress-row">
+          <span class="ch-progress-label">Exercise progress</span>
+          <div class="ch-progress-track"><div class="ch-progress-fill" id="ch2-header-progress-fill" style="width:0%"></div></div>
+          <span class="ch-progress-pct" id="ch2-header-progress-pct">0%</span>
+        </div>
+      </div>
+
+      <div class="ch-tabs-nav">
+        <button class="ch-tab-btn active" data-tab="lesson" onclick="switchTab('lesson')">Lesson</button>
+        <button class="ch-tab-btn" data-tab="exercises" onclick="switchTab('exercises')">
+          Exercises&nbsp;<span class="ch-tab-counter" id="ch2-ex-counter">0/10</span>
+        </button>
+        <button class="ch-tab-btn" data-tab="quiz" onclick="switchTab('quiz')">
+          Quiz&nbsp;<span class="ch-tab-badge" id="ch2-quiz-badge" style="display:none">PASSED</span>
+        </button>
+      </div>
+      </div><!-- .ch-sticky-shell -->
+
+      <!-- ═══ TAB: LESSON ═══════════════════════════ -->
+      <div id="ch2-tab-lesson" class="ch-tab active" data-tab="lesson">
+        <div class="lesson-content">
+
+          <!-- History -->
+          <div class="history-card">
+            <div class="history-card-label">History of Algebra</div>
+            <h3>From Rhetoric to Symbols</h3>
+            <p>The word <em>algebra</em> derives from the Arabic <em>al-jabr</em> — "reunion of broken parts" — taken from the title of the 9th-century treatise by the Persian mathematician <strong>Mu&#7717;ammad ibn M&#363;s&#257; al-Khw&#257;rizm&#299;</strong>. In that work he solved linear and quadratic equations entirely in prose, with no symbols at all.</p>
+            <p>Symbolic algebra emerged gradually. In the 16th century, the French mathematician <strong>Fran&ccedil;ois Vi&egrave;te</strong> introduced letters to represent known and unknown quantities. <strong>Ren&eacute; Descartes</strong> later standardised the convention we still use today: letters near the end of the alphabet ($x, y, z$) for unknowns and letters near the beginning ($a, b, c$) for known constants. This seemingly small notational choice unlocked centuries of mathematical progress.</p>
+          </div>
+
+          <!-- Topic 1 -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">01</div>
+              <h2 class="topic-title">Variables and Expressions</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>variable</strong> is a symbol (usually a letter) standing in for an unknown or changing quantity. An <strong>algebraic expression</strong> combines variables, constants, and operations — but contains no equals sign.</p>
+              <p>To <strong>evaluate</strong> an expression, substitute the given value for each variable and simplify following PEMDAS.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Evaluating an Expression</div>
+              $$\text{If } f = 3x^2 - 2x + 1 \text{ and } x = 4{:}\quad f = 3(16) - 2(4) + 1 = 48 - 8 + 1 = 41$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Like terms</strong> share the same variable(s) raised to the same power(s). Only like terms can be combined: $\;5x + 3x = 8x$, but $\;5x + 3x^2$ cannot be simplified further.</p>
+              <p>The <strong>distributive property</strong> lets you expand products over sums: $\;a(b + c) = ab + ac$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 2 -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">02</div>
+              <h2 class="topic-title">Solving Linear Equations</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>linear equation</strong> in one variable has the form $ax + b = c$ (where $a \ne 0$). Solving means isolating the variable using <em>inverse operations</em> — whatever is done to one side must be done to the other.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Properties of Equality</div>
+              $$\text{If } a = b \text{, then:}\quad a + c = b + c \quad a - c = b - c \quad ac = bc \quad \frac{a}{c} = \frac{b}{c}\;(c \ne 0)$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Strategy for multi-step equations:</strong></p>
+              <p>1. Distribute and combine like terms on each side.</p>
+              <p>2. Move all variable terms to one side, constants to the other.</p>
+              <p>3. Divide by the coefficient of the variable.</p>
+              <p><strong>Example:</strong> Solve $2(x + 3) - x = 11$: distribute → $2x + 6 - x = 11$ → combine → $x + 6 = 11$ → $x = 5$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 3 -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">03</div>
+              <h2 class="topic-title">Systems of Linear Equations</h2>
+            </div>
+            <div class="topic-body">
+              <p>A <strong>system</strong> is two or more equations that must be satisfied simultaneously. For two equations in two unknowns, there is generally exactly one solution — the point where their graphs intersect.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">Standard Form of a 2×2 System</div>
+              $$\begin{cases} a_1 x + b_1 y = c_1 \\ a_2 x + b_2 y = c_2 \end{cases}$$
+            </div>
+            <div class="topic-body">
+              <p><strong>Substitution method:</strong> Solve one equation for one variable, then substitute that expression into the other equation.</p>
+              <p><strong>Elimination method:</strong> Multiply one or both equations by constants so that a variable's coefficients are opposites, then add the equations to eliminate that variable.</p>
+              <p><strong>Example (elimination):</strong> $x + y = 7$ and $x - y = 3$. Add: $2x = 10$, so $x = 5$; substitute back: $y = 2$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Topic 4 -->
+          <div class="topic-section">
+            <div class="topic-header">
+              <div class="topic-num">04</div>
+              <h2 class="topic-title">Inequalities</h2>
+            </div>
+            <div class="topic-body">
+              <p>An <strong>inequality</strong> uses $<,\,>,\,\le,\,\ge$ instead of $=$. It describes a range of values rather than a single solution. Most rules for equations apply — with one critical exception.</p>
+            </div>
+            <div class="formula-block">
+              <div class="formula-label">The Flip Rule</div>
+              $$\text{Multiplying or dividing both sides by a \textbf{negative} number \textbf{reverses} the inequality sign.}$$
+              $$-2x < 8 \;\;\Longrightarrow\;\; x > -4$$
+            </div>
+            <div class="topic-body">
+              <p>Solutions are expressed as <strong>intervals</strong>: $x > 3$ on a number line has an open circle at 3 and an arrow pointing right. In interval notation: $(3,\,+\infty)$.</p>
+              <p>A <strong>compound inequality</strong> like $-1 \le 2x + 3 \le 9$ is solved by applying operations to all three parts simultaneously: subtract 3 → $-4 \le 2x \le 6$; divide by 2 → $-2 \le x \le 3$.</p>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Real-life Applications -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Real-Life Applications</h2>
+          <div class="app-grid">
+            <div class="app-card">
+              <span class="app-card-icon">&#9881;</span>
+              <div class="app-card-title">Engineering &amp; Science</div>
+              <div class="app-card-body">
+                <p>Every physical law is an equation. Ohm's Law $V = IR$ lets an engineer solve for the unknown current when voltage and resistance are known. Newton's second law $F = ma$ is rearranged millions of times daily in structural and mechanical design to find the one unknown among three quantities.</p>
+                <p>Systems of equations model circuits with multiple loops (Kirchhoff's laws) or structural forces at a joint — the same algebraic techniques taught here scale directly to professional practice.</p>
+              </div>
+            </div>
+            <div class="app-card">
+              <span class="app-card-icon">&#128200;</span>
+              <div class="app-card-title">Business &amp; Economics</div>
+              <div class="app-card-body">
+                <p>A company's <strong>break-even point</strong> is found by setting revenue equal to cost: $px = cx + F$, where $p$ is price per unit, $c$ is variable cost per unit, and $F$ is fixed costs. Solving: $x = \dfrac{F}{p - c}$ units must be sold to cover expenses.</p>
+                <p>Inequalities appear in budget constraints and linear programming — a business maximises profit subject to resource limits expressed as a system of inequalities.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <!-- Worked Examples -->
+          <h2 class="section-heading" style="margin-bottom:18px;">Worked Examples</h2>
+
+          <!-- Example 1 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 1</div>
+                <div class="we-question">Solve: $3(x - 4) = 2x + 1$</div>
+              </div>
+              <span class="we-difficulty diff-easy">Easy</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Distribute</strong> the left side: $3x - 12 = 2x + 1$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Move variable terms left:</strong> subtract $2x$ from both sides: $x - 12 = 1$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Isolate $x$:</strong> add 12: $x = 13$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">4</div>
+                <div class="we-step-body"><strong>Verify:</strong> $3(13-4) = 3(9) = 27$ and $2(13)+1 = 27$ &#10003;</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: $x = 13$</div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 2</div>
+                <div class="we-question">Solve the system: $2x + y = 7$ and $x - y = 2$</div>
+              </div>
+              <span class="we-difficulty diff-medium">Medium</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Elimination:</strong> add the two equations (the $y$ terms cancel):<br>$(2x + y) + (x - y) = 7 + 2 \;\Rightarrow\; 3x = 9$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Solve for $x$:</strong> $x = 3$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Back-substitute</strong> into $x - y = 2$: $3 - y = 2 \;\Rightarrow\; y = 1$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">4</div>
+                <div class="we-step-body"><strong>Verify in both equations:</strong> $2(3)+1=7$ &#10003; and $3-1=2$ &#10003;</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: $x = 3,\; y = 1$</div>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="worked-example">
+            <div class="we-header">
+              <div>
+                <div class="we-label">Example 3</div>
+                <div class="we-question">Solve the compound inequality: $-4 \le 2x + 2 \le 10$</div>
+              </div>
+              <span class="we-difficulty diff-hard">Hard</span>
+            </div>
+            <div class="we-steps">
+              <div class="we-step">
+                <div class="we-step-num">1</div>
+                <div class="we-step-body"><strong>Subtract 2 from all three parts:</strong> $-4 - 2 \le 2x \le 10 - 2 \;\Rightarrow\; -6 \le 2x \le 8$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">2</div>
+                <div class="we-step-body"><strong>Divide all parts by 2</strong> (positive, so no flip): $-3 \le x \le 4$</div>
+              </div>
+              <div class="we-step">
+                <div class="we-step-num">3</div>
+                <div class="we-step-body"><strong>Interpret:</strong> any $x$ in the closed interval $[-3,\, 4]$ satisfies the inequality. Test $x = 0$: $-4 \le 2 \le 10$ &#10003;</div>
+              </div>
+            </div>
+            <div class="we-answer">Answer: $-3 \le x \le 4$, i.e.\ $x \in [-3,\, 4]$</div>
+          </div>
+
+        </div><!-- .lesson-content -->
+      </div><!-- #ch2-tab-lesson -->
+
+
+      <!-- ═══ TAB: EXERCISES ════════════════════════ -->
+      <div id="ch2-tab-exercises" class="ch-tab" data-tab="exercises">
+        <div class="exercises-content">
+          <div class="exercises-header">
+            <div class="exercises-title">Practice Exercises</div>
+            <div class="exercises-score-text" id="ch2-ex-score-text">0 / 10 correct</div>
+          </div>
+          <p class="exercises-desc">Answer at least 8 out of 10 correctly (80%) to qualify for the chapter quiz.</p>
+          <div class="ch-progress-row" style="margin-bottom:20px;">
+            <span class="ch-progress-label">Score</span>
+            <div class="ch-progress-track" style="width:auto;flex:1;max-width:340px;"><div class="ch-progress-fill" id="ch2-ex-progress-fill" style="width:0%"></div></div>
+            <span class="ch-progress-pct" id="ch2-ex-progress-pct">0%</span>
+          </div>
+          <div class="difficulty-legend">
+            <span class="dl-item"><span class="we-difficulty diff-easy">Easy</span>&nbsp;Q1–3</span>
+            <span class="dl-item"><span class="we-difficulty diff-medium">Medium</span>&nbsp;Q4–7</span>
+            <span class="dl-item"><span class="we-difficulty diff-hard">Hard</span>&nbsp;Q8–10</span>
+          </div>
+
+          <!-- Q1 -->
+          <div class="ex-card" id="ex2-1" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q1</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">Evaluate $4x - 1$ when $x = 3$.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="true"  onclick="selectMCOption2('1',this)"><div class="mc-letter">A</div><span class="mc-text">$11$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption2('1',this)"><div class="mc-letter">B</div><span class="mc-text">$9$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('1',this)"><div class="mc-letter">C</div><span class="mc-text">$13$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('1',this)"><div class="mc-letter">D</div><span class="mc-text">$7$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('1')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $4(3)-1=12-1=11$. Substitute $x=3$, then multiply before subtracting.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>A: $11$</strong>.<div class="fb-expl">B ($9$): multiplied $4\times3=12$ then subtracted 3 instead of 1.<br>C ($13$): added 1 instead of subtracting it.<br>D ($7$): computed $(4-1)\times3=9$, mis-applying the order of operations.</div></div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="ex-card" id="ex2-2" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q2</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">Solve $x + 9 = 15$.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption2('2',this)"><div class="mc-letter">A</div><span class="mc-text">$24$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption2('2',this)"><div class="mc-letter">B</div><span class="mc-text">$6$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('2',this)"><div class="mc-letter">C</div><span class="mc-text">$4$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('2',this)"><div class="mc-letter">D</div><span class="mc-text">$7$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('2')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Subtract 9 from both sides: $x = 15 - 9 = 6$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: $6$</strong>.<div class="fb-expl">A ($24$): you added 9 to 15 instead of subtracting — the inverse operation reverses addition.<br>C &amp; D: arithmetic errors; always verify by substituting back: $6+9=15$ &#10003;</div></div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="ex-card" id="ex2-3" data-type="mc" data-xp="10">
+            <div class="ex-header">
+              <span class="ex-num">Q3</span><span class="we-difficulty diff-easy">Easy</span>
+              <div class="ex-question">Which expression is equivalent to $5x - 2x$?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="true"  onclick="selectMCOption2('3',this)"><div class="mc-letter">A</div><span class="mc-text">$3x$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption2('3',this)"><div class="mc-letter">B</div><span class="mc-text">$7x$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('3',this)"><div class="mc-letter">C</div><span class="mc-text">$3x^2$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('3',this)"><div class="mc-letter">D</div><span class="mc-text">$10x^2$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('3')">Check Answer</button>
+              <span class="xp-reward">+10 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Like terms share the same variable and exponent: $5x - 2x = (5-2)x = 3x$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>A: $3x$</strong>.<div class="fb-expl">B ($7x$): subtracted the coefficients backwards or added instead of subtracting.<br>C &amp; D: combined the exponents — exponents are not affected when combining like terms; only the coefficients change.</div></div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="ex-card" id="ex2-4" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q4</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Solve $3x - 5 = 16$.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption2('4',this)"><div class="mc-letter">A</div><span class="mc-text">$3$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption2('4',this)"><div class="mc-letter">B</div><span class="mc-text">$7$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('4',this)"><div class="mc-letter">C</div><span class="mc-text">$11$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('4',this)"><div class="mc-letter">D</div><span class="mc-text">$4$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('4')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Add 5: $3x = 21$, then divide by 3: $x = 7$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: $7$</strong>.<div class="fb-expl">Step 1 — add 5 to both sides: $3x = 21$. Step 2 — divide by 3: $x = 7$.<br>A ($3$): divided by 5 instead of 3. &nbsp; C ($11$): added 5 to get 21, then added 10 instead of dividing. &nbsp; D ($4$): subtracted 5 (wrong direction).</div></div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="ex-card" id="ex2-5" data-type="fill" data-answer="36" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q5</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Solve $\dfrac{x}{4} = 9$.</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">$x\;=\;$</span>
+              <input class="fill-input" type="text" placeholder="?" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('5')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Multiply both sides by 4: $x = 9 \times 4 = 36$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>36</strong>.<div class="fb-expl">To undo division by 4, multiply both sides by 4: $\frac{x}{4}\times4=9\times4 \Rightarrow x=36$. Check: $36\div4=9$ &#10003;</div></div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="ex-card" id="ex2-6" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q6</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Solve $2(x + 3) = 14$.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="true"  onclick="selectMCOption2('6',this)"><div class="mc-letter">A</div><span class="mc-text">$4$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption2('6',this)"><div class="mc-letter">B</div><span class="mc-text">$7$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('6',this)"><div class="mc-letter">C</div><span class="mc-text">$5$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('6',this)"><div class="mc-letter">D</div><span class="mc-text">$10$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('6')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Distribute: $2x + 6 = 14$, subtract 6: $2x = 8$, divide by 2: $x = 4$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>A: $4$</strong>.<div class="fb-expl">B ($7$): divided 14 by 2 to get 7 then forgot to subtract 3 — you must isolate $x+3$ first: $x+3=7$, then $x=4$.<br>C ($5$): arithmetic error after distributing. &nbsp; D ($10$): added 6 to 14 instead of subtracting.</div></div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="ex-card" id="ex2-7" data-type="mc" data-xp="15">
+            <div class="ex-header">
+              <span class="ex-num">Q7</span><span class="we-difficulty diff-medium">Medium</span>
+              <div class="ex-question">Which value satisfies $3x - 2 > 10$?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption2('7',this)"><div class="mc-letter">A</div><span class="mc-text">$x = 2$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption2('7',this)"><div class="mc-letter">B</div><span class="mc-text">$x = 3$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('7',this)"><div class="mc-letter">C</div><span class="mc-text">$x = 4$</span></div>
+              <div class="mc-option" data-value="D" data-correct="true"  onclick="selectMCOption2('7',this)"><div class="mc-letter">D</div><span class="mc-text">$x = 5$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('7')">Check Answer</button>
+              <span class="xp-reward">+15 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Solve: $3x > 12 \Rightarrow x > 4$. Only $x=5$ satisfies $x>4$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>D: $x = 5$</strong>.<div class="fb-expl">Add 2: $3x > 12$, divide by 3: $x > 4$. Now test each option:<br>A: $3(2)-2=4\not>10$. &nbsp; B: $3(3)-2=7\not>10$. &nbsp; C: $3(4)-2=10\not>10$ (equal, not strictly greater). &nbsp; D: $3(5)-2=13>10$ &#10003;</div></div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="ex-card" id="ex2-8" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q8</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">Solve $4(x - 2) - 2x = 6$.</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption2('8',this)"><div class="mc-letter">A</div><span class="mc-text">$3$</span></div>
+              <div class="mc-option" data-value="B" data-correct="true"  onclick="selectMCOption2('8',this)"><div class="mc-letter">B</div><span class="mc-text">$7$</span></div>
+              <div class="mc-option" data-value="C" data-correct="false" onclick="selectMCOption2('8',this)"><div class="mc-letter">C</div><span class="mc-text">$5$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('8',this)"><div class="mc-letter">D</div><span class="mc-text">$14$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('8')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Distribute: $4x-8-2x=6 \Rightarrow 2x-8=6 \Rightarrow 2x=14 \Rightarrow x=7$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>B: $7$</strong>.<div class="fb-expl">Step 1 — distribute: $4x - 8 - 2x = 6$. Step 2 — combine: $2x - 8 = 6$. Step 3 — add 8: $2x = 14$. Step 4 — divide: $x = 7$.<br>A ($3$): forgot to distribute 4 across $-2$ as well. &nbsp; C ($5$): arithmetic error in step 3. &nbsp; D ($14$): forgot to divide by 2.</div></div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="ex-card" id="ex2-9" data-type="fill" data-answer="7" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q9</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">Solve the system: $x + y = 10$ and $x - y = 4$. Find $x$.</div>
+            </div>
+            <div class="fill-wrap">
+              <span class="fill-wrap-label">$x\;=\;$</span>
+              <input class="fill-input" type="text" placeholder="?" />
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('9')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! Add the equations: $2x = 14$, so $x = 7$. Then $y = 10 - 7 = 3$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>7</strong>.<div class="fb-expl">Elimination: add both equations — the $y$ terms cancel: $(x+y)+(x-y)=10+4 \Rightarrow 2x=14 \Rightarrow x=7$. Back-check: $7+3=10$ &#10003; and $7-3=4$ &#10003;</div></div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="ex-card" id="ex2-10" data-type="mc" data-xp="20">
+            <div class="ex-header">
+              <span class="ex-num">Q10</span><span class="we-difficulty diff-hard">Hard</span>
+              <div class="ex-question">Solve $|x - 3| = 8$. What is the <em>sum</em> of both solutions?</div>
+            </div>
+            <div class="mc-options">
+              <div class="mc-option" data-value="A" data-correct="false" onclick="selectMCOption2('10',this)"><div class="mc-letter">A</div><span class="mc-text">$16$</span></div>
+              <div class="mc-option" data-value="B" data-correct="false" onclick="selectMCOption2('10',this)"><div class="mc-letter">B</div><span class="mc-text">$5$</span></div>
+              <div class="mc-option" data-value="C" data-correct="true"  onclick="selectMCOption2('10',this)"><div class="mc-letter">C</div><span class="mc-text">$6$</span></div>
+              <div class="mc-option" data-value="D" data-correct="false" onclick="selectMCOption2('10',this)"><div class="mc-letter">D</div><span class="mc-text">$-2$</span></div>
+            </div>
+            <div class="ex-action-row">
+              <button class="btn-check" onclick="checkExercise2('10')">Check Answer</button>
+              <span class="xp-reward">+20 XP</span>
+            </div>
+            <div class="feedback-box fb-correct"><span class="fb-icon">&#10003;</span>Correct! $x-3=8 \Rightarrow x=11$; $x-3=-8 \Rightarrow x=-5$. Sum: $11+(-5)=6$.</div>
+            <div class="feedback-box fb-incorrect"><span class="fb-icon">&#10007;</span> The answer is <strong>C: $6$</strong>.<div class="fb-expl">An absolute-value equation $|A|=k$ gives two cases: $A=k$ or $A=-k$.<br>Case 1: $x-3=8 \Rightarrow x=11$. &nbsp; Case 2: $x-3=-8 \Rightarrow x=-5$. Sum: $11+(-5)=6$.<br>A ($16$): only considered the positive case and doubled it. &nbsp; D ($-2$): sign error in one of the cases.</div></div>
+          </div>
+
+        </div><!-- .exercises-content -->
+      </div><!-- #ch2-tab-exercises -->
+
+
+      <!-- ═══ TAB: QUIZ ════════════════════════════ -->
+      <div id="ch2-tab-quiz" class="ch-tab" data-tab="quiz">
+        <div class="quiz-content">
+          <div class="quiz-header">
+            <div class="quiz-title">Chapter 2 Quiz</div>
+            <p class="quiz-desc">5 questions spanning all topics. Score at least 4/5 (80%) to pass. Combined with 80% on exercises, a passing score unlocks Chapter 3 — Geometry.</p>
+            <div class="quiz-rules">
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>5 multiple-choice questions</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Pass mark: 4 out of 5</div>
+              <div class="quiz-rule"><span class="quiz-rule-dot"></span>Can be retaken if failed</div>
+            </div>
+          </div>
+
+          <div id="quiz2-form" class="quiz-form">
+
+            <!-- Quiz Q1 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q1</span>
+                <div class="quiz-q-text">Solve $5x + 2 = 27$.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_1')"><input type="radio" name="q2_1" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$x = 4$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_1')"><input type="radio" name="q2_1" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$x = 6$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_1')"><input type="radio" name="q2_1" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$x = 5$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_1')"><input type="radio" name="q2_1" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$x = 3$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q2 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q2</span>
+                <div class="quiz-q-text">Which inequality correctly represents "twice a number decreased by 3 is at least 11"?</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_2')"><input type="radio" name="q2_2" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$2x + 3 \le 11$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_2')"><input type="radio" name="q2_2" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$2x - 3 \ge 11$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_2')"><input type="radio" name="q2_2" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$2x - 3 > 11$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_2')"><input type="radio" name="q2_2" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$3x - 2 \ge 11$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q3 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q3</span>
+                <div class="quiz-q-text">Solve by substitution: $y = x + 2$ and $2x + y = 11$. Find $y$.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_3')"><input type="radio" name="q2_3" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$y = 3$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_3')"><input type="radio" name="q2_3" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$y = 4$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_3')"><input type="radio" name="q2_3" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$y = 5$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_3')"><input type="radio" name="q2_3" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$y = 6$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q4 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q4</span>
+                <div class="quiz-q-text">Solve $\dfrac{3x - 1}{2} = 7$.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_4')"><input type="radio" name="q2_4" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$x = 4$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_4')"><input type="radio" name="q2_4" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$x = 5$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_4')"><input type="radio" name="q2_4" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$x = 6$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_4')"><input type="radio" name="q2_4" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$x = 8$</span></label>
+              </div>
+            </div>
+
+            <!-- Quiz Q5 -->
+            <div class="quiz-q">
+              <div class="quiz-q-header">
+                <span class="quiz-q-num">Q5</span>
+                <div class="quiz-q-text">Solve $3x + 2(x - 1) = 13$.</div>
+              </div>
+              <div class="mc-options">
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_5')"><input type="radio" name="q2_5" value="A" style="display:none"><div class="mc-letter">A</div><span class="mc-text">$x = 2$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_5')"><input type="radio" name="q2_5" value="B" style="display:none"><div class="mc-letter">B</div><span class="mc-text">$x = 3$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_5')"><input type="radio" name="q2_5" value="C" style="display:none"><div class="mc-letter">C</div><span class="mc-text">$x = 4$</span></label>
+                <label class="mc-option" onclick="selectQuiz2Opt(this,'q2_5')"><input type="radio" name="q2_5" value="D" style="display:none"><div class="mc-letter">D</div><span class="mc-text">$x = 5$</span></label>
+              </div>
+            </div>
+
+            <div class="quiz-submit-row">
+              <button class="btn-primary" onclick="submitQuiz2()">Submit Quiz</button>
+            </div>
+          </div><!-- #quiz2-form -->
+
+          <!-- Result panel -->
+          <div id="quiz2-result" class="quiz-result">
+            <span class="quiz-result-icon" id="quiz2-result-icon">&#127891;</span>
+            <div class="quiz-result-title" id="quiz2-result-title">Excellent Work!</div>
+            <span class="quiz-result-score" id="quiz2-result-score">5 / 5</span>
+            <p class="quiz-result-msg" id="quiz2-result-msg"></p>
+            <button class="btn-retry" onclick="retryQuiz2()">Retake Quiz</button>
+            <div class="quiz-unlock-banner" id="quiz2-unlock-banner"></div>
+          </div>
+
+        </div><!-- .quiz-content -->
+      </div><!-- #ch2-tab-quiz -->
+
+    </section><!-- #view-chapter-2 -->
+
+    <!-- Generic placeholder for locked chapters -->
+    <section id="view-chapter" class="view">
+      <div style="padding: 40px 48px;">
+        <p style="color: var(--text-muted); font-style: italic;">Chapter content coming soon.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Lock toast -->
+<div id="lock-toast">Complete previous chapters to unlock this one.</div>
+
+<script>
+  // ──────────────────────────────────────────────────
+  //  DATA: Chapter manifest
+  // ──────────────────────────────────────────────────
+  const CHAPTERS = [
+    { id: 'chapter-1', num: 1, title: 'Arithmetic',          subtitle: 'Integers, Fractions & PEMDAS', lessons: 0, exercises: 10 },
+    { id: 'chapter-2', num: 2, title: 'Algebra I',          subtitle: 'Equations & Inequalities', lessons: 0,  exercises: 10 },
+    { id: 'chapter-3', num: 3, title: 'Geometry',           subtitle: 'Shapes & Proofs',          lessons: 10, exercises: 20 },
+    { id: 'chapter-4', num: 4, title: 'Algebra II',         subtitle: 'Functions & Polynomials',  lessons: 9,  exercises: 18 },
+    { id: 'chapter-5', num: 5, title: 'Trigonometry',       subtitle: 'Angles & Waves',           lessons: 8,  exercises: 16 },
+    { id: 'chapter-6', num: 6, title: 'Pre-Calculus',       subtitle: 'Limits & Sequences',       lessons: 7,  exercises: 14 },
+    { id: 'chapter-7', num: 7, title: 'Calculus I',         subtitle: 'Derivatives & Integrals',  lessons: 12, exercises: 24 },
+    { id: 'chapter-8', num: 8, title: 'Linear Algebra',     subtitle: 'Vectors & Matrices',       lessons: 10, exercises: 20 },
+  ];
+
+  // ──────────────────────────────────────────────────
+  //  LOCAL STORAGE
+  // ──────────────────────────────────────────────────
+  const STORAGE_KEY = 'mathemarica_v1';
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return getDefaultState();
+  }
+
+  function getDefaultState() {
+    const chapterProgress = {};
+    CHAPTERS.forEach(c => {
+      chapterProgress[c.id] = { lessonsCompleted: 0, exercisesCompleted: 0, xp: 0, exerciseAnswers: {}, quizPassed: false, quizScore: null };
+    });
+    return {
+      streak: 0,
+      lastVisit: null,
+      theme: 'dark',
+      totalXP: 0,
+      chapterProgress,
+    };
+  }
+
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function mergeState(defaults, saved) {
+    // Ensure all chapter keys exist even if new chapters added later
+    const merged = { ...defaults, ...saved };
+    CHAPTERS.forEach(c => {
+      if (!merged.chapterProgress[c.id]) {
+        merged.chapterProgress[c.id] = { lessonsCompleted: 0, exercisesCompleted: 0, xp: 0, exerciseAnswers: {}, quizPassed: false, quizScore: null };
+      } else {
+        // Back-fill new fields for existing saves
+        const cp = merged.chapterProgress[c.id];
+        if (!cp.exerciseAnswers) cp.exerciseAnswers = {};
+        if (cp.quizPassed   === undefined) cp.quizPassed  = false;
+        if (cp.quizScore    === undefined) cp.quizScore   = null;
+      }
+    });
+    return merged;
+  }
+
+  // ──────────────────────────────────────────────────
+  //  STATE & STREAK LOGIC
+  // ──────────────────────────────────────────────────
+  let state = mergeState(getDefaultState(), loadState());
+
+  function updateStreak() {
+    const today = new Date().toDateString();
+    if (state.lastVisit === today) return; // already counted today
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (state.lastVisit === yesterday) {
+      state.streak += 1;
+    } else if (state.lastVisit !== today) {
+      state.streak = 1;
+    }
+    state.lastVisit = today;
+    saveState(state);
+  }
+
+  // ──────────────────────────────────────────────────
+  //  PROGRESS CALCULATIONS
+  // ──────────────────────────────────────────────────
+  function getChapterPct(chapterId) {
+    const ch = CHAPTERS.find(c => c.id === chapterId);
+    if (!ch) return 0;
+    const progress = state.chapterProgress[chapterId];
+    const total = ch.lessons + ch.exercises;
+    const done  = progress.lessonsCompleted + progress.exercisesCompleted;
+    return total === 0 ? 0 : Math.round((done / total) * 100);
+  }
+
+  function getOverallPct() {
+    let totalItems = 0, doneItems = 0;
+    CHAPTERS.forEach(c => {
+      totalItems += c.lessons + c.exercises;
+      const p = state.chapterProgress[c.id];
+      doneItems += p.lessonsCompleted + p.exercisesCompleted;
+    });
+    return totalItems === 0 ? 0 : Math.round((doneItems / totalItems) * 100);
+  }
+
+  function getChaptersCompleted() {
+    return CHAPTERS.filter(c => getChapterPct(c.id) === 100).length;
+  }
+
+  function getTotalXP() {
+    return Object.values(state.chapterProgress).reduce((sum, p) => sum + (p.xp || 0), 0);
+  }
+
+  function isChapterUnlocked(index) {
+    if (index === 0) return true;
+    const prevId = CHAPTERS[index - 1].id;
+    if (prevId === 'chapter-1') {
+      const p = state.chapterProgress['chapter-1'];
+      const exPct = Math.round(((p.exercisesCompleted || 0) / 10) * 100);
+      return exPct >= 80 && p.quizPassed === true;
+    }
+    if (prevId === 'chapter-2') {
+      const p = state.chapterProgress['chapter-2'];
+      const exPct = Math.round(((p.exercisesCompleted || 0) / 10) * 100);
+      return exPct >= 80 && p.quizPassed === true;
+    }
+    return getChapterPct(prevId) === 100;
+  }
+
+  // ──────────────────────────────────────────────────
+  //  NAVIGATION
+  // ──────────────────────────────────────────────────
+  let currentView = 'dashboard';
+
+  function navigateTo(viewId) {
+    // Check if it's a chapter and if locked
+    const chIdx = CHAPTERS.findIndex(c => c.id === viewId);
+    if (chIdx > 0 && !isChapterUnlocked(chIdx)) {
+      showLockToast();
+      return;
+    }
+
+    currentView = viewId;
+
+    // Update nav items
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.view === viewId);
+    });
+
+    // Update chapter items
+    document.querySelectorAll('.chapter-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.chapter === viewId);
+    });
+
+    // Show correct view
+    if (viewId === 'dashboard') {
+      renderDashboard();
+      showView('view-dashboard');
+    } else if (viewId === 'chapter-1') {
+      showView('view-chapter-1');
+      updateCh1UI();
+      restoreExerciseStates();
+      restoreQuizState();
+    } else if (viewId === 'chapter-2') {
+      showView('view-chapter-2');
+      updateCh2UI();
+      restoreExercise2States();
+      restoreQuiz2State();
+    } else {
+      showView('view-chapter');
+    }
+  }
+
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  // ──────────────────────────────────────────────────
+  //  TOAST (general)
+  // ──────────────────────────────────────────────────
+  let toastTimer = null;
+  const LOCK_MSG = 'Complete previous chapters to unlock this one.';
+
+  function showToast(msg) {
+    const toast = document.getElementById('lock-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => { toast.textContent = LOCK_MSG; }, 300);
+    }, 2400);
+  }
+
+  function showLockToast() { showToast(LOCK_MSG); }
+
+  // ──────────────────────────────────────────────────
+  //  THEME
+  // ──────────────────────────────────────────────────
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('icon-moon').style.display = theme === 'dark'  ? 'block' : 'none';
+    document.getElementById('icon-sun').style.display  = theme === 'light' ? 'block' : 'none';
+    state.theme = theme;
+    saveState(state);
+  }
+
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    applyTheme(state.theme === 'dark' ? 'light' : 'dark');
+  });
+
+  // ──────────────────────────────────────────────────
+  //  RENDER: SIDEBAR CHAPTERS
+  // ──────────────────────────────────────────────────
+  function renderSidebar() {
+    const list = document.getElementById('chapter-list');
+    list.innerHTML = '';
+
+    CHAPTERS.forEach((ch, idx) => {
+      const unlocked  = isChapterUnlocked(idx);
+      const pct       = getChapterPct(ch.id);
+      const completed = pct === 100;
+
+      const item = document.createElement('div');
+      item.className = [
+        'chapter-item',
+        unlocked  ? 'unlocked' : 'locked',
+        completed ? 'completed' : '',
+        currentView === ch.id ? 'active' : '',
+      ].filter(Boolean).join(' ');
+      item.dataset.chapter = ch.id;
+
+      if (unlocked) {
+        item.onclick = () => navigateTo(ch.id);
+      } else {
+        item.onclick = showLockToast;
+      }
+
+      const numEl = document.createElement('div');
+      numEl.className = 'chapter-num';
+      if (completed) {
+        numEl.textContent = '✓';
+      } else {
+        numEl.textContent = String(ch.num).padStart(2, '0');
+      }
+
+      const infoEl = document.createElement('div');
+      infoEl.className = 'chapter-info';
+      infoEl.innerHTML = `
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-subtitle">${ch.subtitle}</div>
+        ${unlocked ? `<div class="chapter-mini-progress">
+          <div class="chapter-mini-fill" style="width:${pct}%"></div>
+        </div>` : ''}
+      `;
+
+      item.appendChild(numEl);
+      item.appendChild(infoEl);
+
+      if (!unlocked) {
+        const lockEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        lockEl.setAttribute('class', 'lock-icon');
+        lockEl.setAttribute('viewBox', '0 0 24 24');
+        lockEl.setAttribute('fill', 'none');
+        lockEl.setAttribute('stroke', 'currentColor');
+        lockEl.setAttribute('stroke-width', '2');
+        lockEl.setAttribute('stroke-linecap', 'round');
+        lockEl.setAttribute('stroke-linejoin', 'round');
+        lockEl.innerHTML = `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>`;
+        item.appendChild(lockEl);
+      }
+
+      list.appendChild(item);
+    });
+  }
+
+  // ──────────────────────────────────────────────────
+  //  RENDER: TOPBAR STATS
+  // ──────────────────────────────────────────────────
+  function renderTopbar() {
+    const pct = getOverallPct();
+    document.getElementById('topbar-progress-fill').style.width = pct + '%';
+    document.getElementById('topbar-progress-pct').textContent  = pct + '%';
+    document.getElementById('streak-count').textContent = state.streak;
+  }
+
+  // ──────────────────────────────────────────────────
+  //  RENDER: DASHBOARD
+  // ──────────────────────────────────────────────────
+  function renderDashboard() {
+    const pct       = getOverallPct();
+    const completed = getChaptersCompleted();
+    const xp        = getTotalXP();
+
+    document.getElementById('dash-pct').textContent      = pct + '%';
+    document.getElementById('dash-chapters').textContent = `${completed} / ${CHAPTERS.length}`;
+    document.getElementById('dash-streak').textContent   = state.streak;
+
+    // Progress ring
+    const circumference = 251.2; // 2π × 40
+    const offset = circumference - (pct / 100) * circumference;
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    document.getElementById('ring-pct').textContent = pct + '%';
+
+    // Chapter progress rows
+    const cpList = document.getElementById('chapter-progress-list');
+    cpList.innerHTML = '';
+    CHAPTERS.forEach(ch => {
+      const chPct = getChapterPct(ch.id);
+      const row = document.createElement('div');
+      row.className = 'chapter-progress-row';
+      row.innerHTML = `
+        <span class="cpr-name">${ch.title}</span>
+        <div class="cpr-bar">
+          <div class="progress-track" style="height:4px;">
+            <div class="progress-fill" style="width:${chPct}%"></div>
+          </div>
+        </div>
+        <span class="cpr-pct">${chPct}%</span>
+      `;
+      cpList.appendChild(row);
+    });
+  }
+
+  // ──────────────────────────────────────────────────
+  //  RENDER: SIDEBAR FOOTER STATS
+  // ──────────────────────────────────────────────────
+  function renderFooterStats() {
+    let totalLessons = 0, totalExercises = 0;
+    CHAPTERS.forEach(c => {
+      const p = state.chapterProgress[c.id];
+      totalLessons    += p.lessonsCompleted;
+      totalExercises  += p.exercisesCompleted;
+    });
+    document.getElementById('stat-lessons').textContent   = totalLessons;
+    document.getElementById('stat-exercises').textContent = totalExercises;
+    document.getElementById('stat-xp').textContent        = getTotalXP();
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 1 — UI helpers
+  // ──────────────────────────────────────────────────
+  function updateCh1UI() {
+    const p = state.chapterProgress['chapter-1'];
+    const done = p.exercisesCompleted || 0;
+    const total = 10;
+    const pct = Math.round((done / total) * 100);
+
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el[typeof v === 'string' && el.tagName !== 'INPUT' ? 'textContent' : 'style'] && (el.textContent = v); };
+    const setWidth = (id, w) => { const el = document.getElementById(id); if (el) el.style.width = w; };
+
+    setWidth('ch1-header-progress-fill', pct + '%');
+    setWidth('ch1-ex-progress-fill', pct + '%');
+
+    const hPct = document.getElementById('ch1-header-progress-pct');
+    const ePct = document.getElementById('ch1-ex-progress-pct');
+    const scoreText = document.getElementById('ch1-ex-score-text');
+    const counter = document.getElementById('ch1-ex-counter');
+    if (hPct)      hPct.textContent      = pct + '%';
+    if (ePct)      ePct.textContent      = pct + '%';
+    if (scoreText) scoreText.textContent = `${done} / ${total} correct`;
+    if (counter)   counter.textContent   = `${done}/${total}`;
+
+    const quizBadge = document.getElementById('ch1-quiz-badge');
+    if (quizBadge) quizBadge.style.display = p.quizPassed ? '' : 'none';
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 1 — Tab switching
+  // ──────────────────────────────────────────────────
+  function switchTab(tabId) {
+    const activeView = document.querySelector('.view.active');
+    if (!activeView) return;
+    activeView.querySelectorAll('.ch-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+    activeView.querySelectorAll('.ch-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.tab === tabId);
+    });
+    // Re-render KaTeX for newly visible content
+    if (window.renderMathInElement) {
+      const tabEl = activeView.querySelector(`.ch-tab[data-tab="${tabId}"]`);
+      if (tabEl) renderMathInElement(tabEl, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$',  right: '$',  display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 1 — Exercises
+  // ──────────────────────────────────────────────────
+  function selectMCOption(exId, optEl) {
+    const p = state.chapterProgress['chapter-1'];
+    if (p.exerciseAnswers && p.exerciseAnswers[exId]) return; // already answered
+    const card = document.getElementById('ex-' + exId);
+    card.querySelectorAll('.mc-option').forEach(o => o.classList.remove('opt-selected'));
+    optEl.classList.add('opt-selected');
+  }
+
+  function checkExercise(exId) {
+    const p = state.chapterProgress['chapter-1'];
+    if (!p.exerciseAnswers) p.exerciseAnswers = {};
+    if (p.exerciseAnswers[exId]) return; // already answered
+
+    const card = document.getElementById('ex-' + exId);
+    const type = card.dataset.type;
+    let isCorrect = false;
+    let answerValue = '';
+
+    if (type === 'mc') {
+      const sel = card.querySelector('.mc-option.opt-selected');
+      if (!sel) { showToast('Select an answer first.'); return; }
+      answerValue = sel.dataset.value;
+      isCorrect = sel.dataset.correct === 'true';
+    } else {
+      const input = card.querySelector('.fill-input');
+      answerValue = (input ? input.value.trim() : '');
+      isCorrect = normaliseFill(answerValue) === normaliseFill(card.dataset.answer);
+    }
+
+    // Persist
+    p.exerciseAnswers[exId] = { correct: isCorrect, value: answerValue };
+    const correctCount = Object.values(p.exerciseAnswers).filter(a => a.correct).length;
+    p.exercisesCompleted = correctCount;
+    if (isCorrect) p.xp = (p.xp || 0) + (parseInt(card.dataset.xp) || 10);
+    saveState(state);
+
+    applyExerciseUI(card, exId, isCorrect, type, answerValue);
+    updateCh1UI();
+    renderTopbar();
+    renderSidebar();
+    renderFooterStats();
+  }
+
+  function normaliseFill(s) {
+    return String(s).toLowerCase().replace(/[$,\s]/g, '').replace(/^0*(\d)/, '$1');
+  }
+
+  function applyExerciseUI(card, exId, isCorrect, type, value) {
+    card.classList.add(isCorrect ? 'answered-correct' : 'answered-incorrect');
+
+    if (type === 'mc') {
+      card.querySelectorAll('.mc-option').forEach(opt => {
+        opt.classList.add('opt-disabled');
+        if (opt.dataset.correct === 'true') {
+          opt.classList.add('opt-correct');
+          opt.classList.remove('opt-selected');
+        } else if (opt.classList.contains('opt-selected') && !isCorrect) {
+          opt.classList.add('opt-wrong');
+          opt.classList.remove('opt-selected');
+        } else {
+          opt.classList.remove('opt-selected');
+        }
+      });
+    } else {
+      const input = card.querySelector('.fill-input');
+      if (input) { input.disabled = true; input.classList.add(isCorrect ? 'fi-correct' : 'fi-wrong'); }
+    }
+
+    const btn = card.querySelector('.btn-check');
+    if (btn) btn.disabled = true;
+
+    // Show appropriate feedback (first = correct, second = incorrect)
+    const fbs = card.querySelectorAll('.feedback-box');
+    if (isCorrect && fbs[0]) fbs[0].classList.add('show');
+    if (!isCorrect && fbs[1]) fbs[1].classList.add('show');
+
+    // Show XP badge
+    if (isCorrect) { const xp = card.querySelector('.xp-reward'); if (xp) xp.style.display = 'inline-flex'; }
+  }
+
+  function restoreExerciseStates() {
+    const p = state.chapterProgress['chapter-1'];
+    if (!p.exerciseAnswers) return;
+    Object.entries(p.exerciseAnswers).forEach(([exId, ans]) => {
+      const card = document.getElementById('ex-' + exId);
+      if (!card || card.classList.contains('answered-correct') || card.classList.contains('answered-incorrect')) return;
+      const type = card.dataset.type;
+      if (type === 'mc') {
+        card.querySelectorAll('.mc-option').forEach(opt => {
+          if (opt.dataset.value === ans.value) opt.classList.add('opt-selected');
+        });
+      } else {
+        const input = card.querySelector('.fill-input');
+        if (input) input.value = ans.value;
+      }
+      applyExerciseUI(card, exId, ans.correct, type, ans.value);
+    });
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 1 — Quiz
+  // ──────────────────────────────────────────────────
+  const QUIZ_ANSWERS = { q1: 'B', q2: 'C', q3: 'A', q4: 'B', q5: 'C' };
+
+  function selectQuizOpt(labelEl, questionName) {
+    document.querySelectorAll(`input[name="${questionName}"]`).forEach(inp => {
+      inp.closest('.mc-option').classList.remove('opt-selected');
+    });
+    labelEl.classList.add('opt-selected');
+    const inp = labelEl.querySelector('input');
+    if (inp) inp.checked = true;
+  }
+
+  function submitQuiz() {
+    let score = 0;
+    let allAnswered = true;
+
+    Object.keys(QUIZ_ANSWERS).forEach(qName => {
+      const checked = document.querySelector(`input[name="${qName}"]:checked`);
+      if (!checked) { allAnswered = false; return; }
+      if (checked.value === QUIZ_ANSWERS[qName]) score++;
+    });
+
+    if (!allAnswered) { showToast('Please answer all 5 questions before submitting.'); return; }
+
+    const passed = score >= 4;
+    const p = state.chapterProgress['chapter-1'];
+    p.quizScore  = score;
+    p.quizPassed = passed;
+    if (passed) p.xp = (p.xp || 0) + 50;
+    saveState(state);
+
+    renderQuizResult(score, passed);
+    updateCh1UI();
+    renderSidebar();
+    renderTopbar();
+  }
+
+  function renderQuizResult(score, passed) {
+    document.getElementById('quiz-form').classList.add('hidden');
+    const result = document.getElementById('quiz-result');
+    result.classList.add('show');
+
+    document.getElementById('quiz-result-icon').textContent  = passed ? '🎓' : '📚';
+    document.getElementById('quiz-result-score').textContent = `${score} / 5`;
+
+    const title = document.getElementById('quiz-result-title');
+    title.textContent  = passed ? 'Excellent Work!' : 'Keep Practicing';
+    title.className    = 'quiz-result-title ' + (passed ? 'qrt-pass' : 'qrt-fail');
+
+    document.getElementById('quiz-result-msg').textContent = passed
+      ? `You scored ${score}/5 (${Math.round(score/5*100)}%). You have passed the Chapter 1 quiz!`
+      : `You scored ${score}/5 (${Math.round(score/5*100)}%). You need at least 4/5 to pass. Review the lesson and try again.`;
+
+    // Unlock banner
+    const p = state.chapterProgress['chapter-1'];
+    const exPct = Math.round(((p.exercisesCompleted || 0) / 10) * 100);
+    const banner = document.getElementById('quiz-unlock-banner');
+    if (banner) {
+      if (passed && exPct >= 80) {
+        banner.textContent = 'Chapter 2 — Algebra I is now unlocked! Continue your journey.';
+        banner.classList.add('show');
+      } else if (passed && exPct < 80) {
+        banner.textContent = `Quiz passed! Complete ${Math.ceil(8 - p.exercisesCompleted)} more exercise(s) correctly to unlock Chapter 2.`;
+        banner.classList.add('show');
+      } else {
+        banner.classList.remove('show');
+      }
+    }
+  }
+
+  function restoreQuizState() {
+    const p = state.chapterProgress['chapter-1'];
+    if (p.quizScore !== null && p.quizScore !== undefined) {
+      renderQuizResult(p.quizScore, p.quizPassed);
+    } else {
+      // Reset form to unanswered state
+      const form = document.getElementById('quiz-form');
+      const result = document.getElementById('quiz-result');
+      if (form)   form.classList.remove('hidden');
+      if (result) result.classList.remove('show');
+    }
+  }
+
+  function retryQuiz() {
+    document.getElementById('quiz-form').classList.remove('hidden');
+    document.getElementById('quiz-result').classList.remove('show');
+    document.querySelectorAll('#quiz-form input[type="radio"]').forEach(r => {
+      r.checked = false;
+      r.closest('.mc-option').classList.remove('opt-selected');
+    });
+    // Clear saved quiz state so it can be re-submitted
+    const p = state.chapterProgress['chapter-1'];
+    p.quizScore  = null;
+    p.quizPassed = false;
+    saveState(state);
+    updateCh1UI();
+    renderSidebar();
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 2 — UI helpers
+  // ──────────────────────────────────────────────────
+  function updateCh2UI() {
+    const p = state.chapterProgress['chapter-2'];
+    const done = p.exercisesCompleted || 0;
+    const total = 10;
+    const pct = Math.round((done / total) * 100);
+
+    const setWidth = (id, w) => { const el = document.getElementById(id); if (el) el.style.width = w; };
+    setWidth('ch2-header-progress-fill', pct + '%');
+    setWidth('ch2-ex-progress-fill', pct + '%');
+
+    const hPct      = document.getElementById('ch2-header-progress-pct');
+    const ePct      = document.getElementById('ch2-ex-progress-pct');
+    const scoreText = document.getElementById('ch2-ex-score-text');
+    const counter   = document.getElementById('ch2-ex-counter');
+    if (hPct)      hPct.textContent      = pct + '%';
+    if (ePct)      ePct.textContent      = pct + '%';
+    if (scoreText) scoreText.textContent = `${done} / ${total} correct`;
+    if (counter)   counter.textContent   = `${done}/${total}`;
+
+    const quizBadge = document.getElementById('ch2-quiz-badge');
+    if (quizBadge) quizBadge.style.display = p.quizPassed ? '' : 'none';
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 2 — Tab switching (handled by shared switchTab)
+  //  Exercises
+  // ──────────────────────────────────────────────────
+  function selectMCOption2(exId, optEl) {
+    const p = state.chapterProgress['chapter-2'];
+    if (p.exerciseAnswers && p.exerciseAnswers[exId]) return;
+    const card = document.getElementById('ex2-' + exId);
+    card.querySelectorAll('.mc-option').forEach(o => o.classList.remove('opt-selected'));
+    optEl.classList.add('opt-selected');
+  }
+
+  function checkExercise2(exId) {
+    const p = state.chapterProgress['chapter-2'];
+    if (!p.exerciseAnswers) p.exerciseAnswers = {};
+    if (p.exerciseAnswers[exId]) return;
+
+    const card = document.getElementById('ex2-' + exId);
+    const type = card.dataset.type;
+    let isCorrect = false;
+    let answerValue = '';
+
+    if (type === 'mc') {
+      const sel = card.querySelector('.mc-option.opt-selected');
+      if (!sel) { showToast('Select an answer first.'); return; }
+      answerValue = sel.dataset.value;
+      isCorrect = sel.dataset.correct === 'true';
+    } else {
+      const input = card.querySelector('.fill-input');
+      answerValue = (input ? input.value.trim() : '');
+      isCorrect = normaliseFill(answerValue) === normaliseFill(card.dataset.answer);
+    }
+
+    p.exerciseAnswers[exId] = { correct: isCorrect, value: answerValue };
+    const correctCount = Object.values(p.exerciseAnswers).filter(a => a.correct).length;
+    p.exercisesCompleted = correctCount;
+    if (isCorrect) p.xp = (p.xp || 0) + (parseInt(card.dataset.xp) || 10);
+    saveState(state);
+
+    applyExerciseUI(card, exId, isCorrect, type, answerValue);
+    updateCh2UI();
+    renderTopbar();
+    renderSidebar();
+    renderFooterStats();
+  }
+
+  function restoreExercise2States() {
+    const p = state.chapterProgress['chapter-2'];
+    if (!p.exerciseAnswers) return;
+    Object.entries(p.exerciseAnswers).forEach(([exId, ans]) => {
+      const card = document.getElementById('ex2-' + exId);
+      if (!card || card.classList.contains('answered-correct') || card.classList.contains('answered-incorrect')) return;
+      const type = card.dataset.type;
+      if (type === 'mc') {
+        card.querySelectorAll('.mc-option').forEach(opt => {
+          if (opt.dataset.value === ans.value) opt.classList.add('opt-selected');
+        });
+      } else {
+        const input = card.querySelector('.fill-input');
+        if (input) input.value = ans.value;
+      }
+      applyExerciseUI(card, exId, ans.correct, type, ans.value);
+    });
+  }
+
+  // ──────────────────────────────────────────────────
+  //  CHAPTER 2 — Quiz
+  // ──────────────────────────────────────────────────
+  const QUIZ2_ANSWERS = { q2_1: 'C', q2_2: 'B', q2_3: 'C', q2_4: 'B', q2_5: 'B' };
+
+  function selectQuiz2Opt(labelEl, questionName) {
+    document.querySelectorAll(`input[name="${questionName}"]`).forEach(inp => {
+      inp.closest('.mc-option').classList.remove('opt-selected');
+    });
+    labelEl.classList.add('opt-selected');
+    const inp = labelEl.querySelector('input');
+    if (inp) inp.checked = true;
+  }
+
+  function submitQuiz2() {
+    let score = 0;
+    let allAnswered = true;
+
+    Object.keys(QUIZ2_ANSWERS).forEach(qName => {
+      const checked = document.querySelector(`input[name="${qName}"]:checked`);
+      if (!checked) { allAnswered = false; return; }
+      if (checked.value === QUIZ2_ANSWERS[qName]) score++;
+    });
+
+    if (!allAnswered) { showToast('Please answer all 5 questions before submitting.'); return; }
+
+    const passed = score >= 4;
+    const p = state.chapterProgress['chapter-2'];
+    p.quizScore  = score;
+    p.quizPassed = passed;
+    if (passed) p.xp = (p.xp || 0) + 50;
+    saveState(state);
+
+    renderQuiz2Result(score, passed);
+    updateCh2UI();
+    renderSidebar();
+    renderTopbar();
+  }
+
+  function renderQuiz2Result(score, passed) {
+    document.getElementById('quiz2-form').classList.add('hidden');
+    const result = document.getElementById('quiz2-result');
+    result.classList.add('show');
+
+    document.getElementById('quiz2-result-icon').textContent  = passed ? '🎓' : '📚';
+    document.getElementById('quiz2-result-score').textContent = `${score} / 5`;
+
+    const title = document.getElementById('quiz2-result-title');
+    title.textContent = passed ? 'Excellent Work!' : 'Keep Practicing';
+    title.className   = 'quiz-result-title ' + (passed ? 'qrt-pass' : 'qrt-fail');
+
+    document.getElementById('quiz2-result-msg').textContent = passed
+      ? `You scored ${score}/5 (${Math.round(score/5*100)}%). You have passed the Chapter 2 quiz!`
+      : `You scored ${score}/5 (${Math.round(score/5*100)}%). You need at least 4/5 to pass. Review the lesson and try again.`;
+
+    const p = state.chapterProgress['chapter-2'];
+    const exPct = Math.round(((p.exercisesCompleted || 0) / 10) * 100);
+    const banner = document.getElementById('quiz2-unlock-banner');
+    if (banner) {
+      if (passed && exPct >= 80) {
+        banner.textContent = 'Chapter 3 — Geometry is now unlocked! Continue your journey.';
+        banner.classList.add('show');
+      } else if (passed && exPct < 80) {
+        banner.textContent = `Quiz passed! Complete ${Math.ceil(8 - p.exercisesCompleted)} more exercise(s) correctly to unlock Chapter 3.`;
+        banner.classList.add('show');
+      } else {
+        banner.classList.remove('show');
+      }
+    }
+  }
+
+  function restoreQuiz2State() {
+    const p = state.chapterProgress['chapter-2'];
+    if (p.quizScore !== null && p.quizScore !== undefined) {
+      renderQuiz2Result(p.quizScore, p.quizPassed);
+    } else {
+      const form   = document.getElementById('quiz2-form');
+      const result = document.getElementById('quiz2-result');
+      if (form)   form.classList.remove('hidden');
+      if (result) result.classList.remove('show');
+    }
+  }
+
+  function retryQuiz2() {
+    document.getElementById('quiz2-form').classList.remove('hidden');
+    document.getElementById('quiz2-result').classList.remove('show');
+    document.querySelectorAll('#quiz2-form input[type="radio"]').forEach(r => {
+      r.checked = false;
+      r.closest('.mc-option').classList.remove('opt-selected');
+    });
+    const p = state.chapterProgress['chapter-2'];
+    p.quizScore  = null;
+    p.quizPassed = false;
+    saveState(state);
+    updateCh2UI();
+    renderSidebar();
+  }
+
+  // ──────────────────────────────────────────────────
+  //  INIT
+  // ──────────────────────────────────────────────────
+  function init() {
+    updateStreak();
+    applyTheme(state.theme);
+    renderTopbar();
+    renderSidebar();
+    renderDashboard();
+    renderFooterStats();
+  }
+
+  init();
+</script>
+</body>
+</html>
